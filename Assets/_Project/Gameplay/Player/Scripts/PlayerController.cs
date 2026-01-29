@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        inputScript = GetComponentInChildren<InputHandler>();
+        inputScript = InputHandler.InputHandlerInstance;
         walkScript = GetComponentInChildren<PlayerWalk>();
         lookScript = GetComponentInChildren<PlayerLook>();
     }
