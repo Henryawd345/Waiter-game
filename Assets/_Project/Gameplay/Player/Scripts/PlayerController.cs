@@ -9,17 +9,25 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        walkScript = this.GetComponent<PlayerWalk>();
+        lookScript = this.GetComponent<PlayerLook>();
+    }
+    void Start()
+    {
+        // since its singleton it must be load after awake() done to avoid race condition which already happened lol
         inputScript = InputHandler.InputHandlerInstance;
-        walkScript = GetComponentInChildren<PlayerWalk>();
-        lookScript = GetComponentInChildren<PlayerLook>();
     }
 
     void Update()
     {
-        walkScript.Move(inputScript.moveInput, inputScript.isRunningInput);
+        if (walkScript != null)
+            walkScript.Move(inputScript.moveInput, inputScript.isRunningInput);
 
-        lookScript.MoveHead(inputScript.lookInput);
-        lookScript.HeadBobbing(inputScript.isMoving, inputScript.isRunningInput);
+        if (lookScript != null)
+        {
+            lookScript.MoveHead(inputScript.lookInput);
+            lookScript.HeadBobbing(inputScript.isMoving, inputScript.isRunningInput);
+        }
         // Debug.Log(input.moveInput.x + " " + input.moveInput.y);
     }
 }

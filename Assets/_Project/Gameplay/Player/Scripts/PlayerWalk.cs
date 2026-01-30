@@ -8,7 +8,7 @@ public class PlayerWalk : MonoBehaviour
 
     void Awake()
     {
-        characterController = GetComponentInChildren<CharacterController>();
+        characterController = this.GetComponent<CharacterController>();
     }
 
     public void Move(Vector2 directionInput, bool isRunning)

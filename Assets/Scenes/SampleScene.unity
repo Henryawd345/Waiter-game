@@ -947,10 +947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf955abe03645514885c3737dc26194b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputHandler
-  moveInput: {x: 0, y: 0}
-  lookInput: {x: 0, y: 0}
-  isMoving: 0
-  isRunningInput: 0
 --- !u!4 &1723437291 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2502768468055784653, guid: b71eb5b36136ca7448eb53eb33e88644, type: 3}
@@ -1181,8 +1177,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7568253313530695517, guid: b71eb5b36136ca7448eb53eb33e88644, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
