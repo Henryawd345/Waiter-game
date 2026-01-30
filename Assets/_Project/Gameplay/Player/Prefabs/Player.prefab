@@ -599,6 +599,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec53f8915e31e1b448c6f79eefb924bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  MovementSpeed: 0
+  JumpHeight: 0
+  Luck: 0
+  Income: 0
+  HasFloatingTray: 0
+  HasSneakers: 0
+  HasTablet: 0
 --- !u!1 &7939753779134015657
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,4 +29,8 @@ public class GoodCustomerMovement : MonoBehaviour
         return navAgent.remainingDistance <= navAgent.stoppingDistance
             && navAgent.velocity.sqrMagnitude < 0.01f;
     }
+    public void Warp(Vector3 pos)
+    {
+        navAgent.Warp(pos);
+    }
 }

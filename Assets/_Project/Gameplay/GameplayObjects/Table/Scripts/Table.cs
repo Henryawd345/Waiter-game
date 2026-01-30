@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Table : MonoBehaviour
 {
@@ -7,17 +8,30 @@ public class Table : MonoBehaviour
     //Position of chair and access point
     public Transform accessPointTransform {get; private set;}
     public Transform chairTransform {get; private set;}
+    public Transform orderAnchorPos {get; private set;}
+    private Transform playerTransform;
     void Awake()
     {
         accessPointTransform = transform.Find("PosHolders/AccessLocationPos");
         chairTransform = transform.Find("PosHolders/ChairPos");
+        orderAnchorPos = transform.Find("PosHolders/OrderAnchorPos");
+        playerTransform = PlayerLocator.PlayerTransform;
 
         occupationState = TableStates.Free;
         occupier = null;
     }
     void Update()
     {
-        
+        // make orderAnchor always spin face the player
+        Vector3 playerPos = playerTransform.position;
+        Vector3 anchorPos = orderAnchorPos.position;
+
+        playerPos.y = anchorPos.y;
+
+        Vector3 direction = playerPos - anchorPos;
+
+        if (direction.sqrMagnitude > 0.001f)
+            orderAnchorPos.rotation = Quaternion.LookRotation(direction);
     }
 
     public bool requestTable(GoodCustomer customer)
@@ -34,5 +48,19 @@ public class Table : MonoBehaviour
     {
         if (customer.Equals(this.occupier))
             occupationState = TableStates.Taken;
+    }
+    public void StandUp(GoodCustomer customer)
+    {
+        if (occupier.Equals(customer))
+        {
+            occupationState = TableStates.Free;
+            occupier = null;
+        }
+    }
+    public void attachOrderToTable(Order order)
+    {
+        order.transform.parent = orderAnchorPos;
+        order.transform.localPosition = Vector3.zero;
+        order.transform.localRotation = Quaternion.identity;
     }
 }
