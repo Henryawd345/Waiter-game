@@ -1,9 +1,7 @@
-# Rude Customer
+# Rude Customer – Development Roadmap
 ### by Henry and TK
 
-# Roguelite Waiter Game – Development Roadmap
-
-This roadmap defines **what to build first, what to delay, and why**, based on your current system designs (Player, Customer, Upgrade, Roguelite).
+This is our roadmap that is used to track out progress.
 
 ---
 
@@ -34,7 +32,7 @@ Customer appears → waits → player picks food → delivers → customer leave
 
 **Build**
 - [ ] Player: move, pick up food, deliver
-- [ ] Customer: Waiting → Good → Leave
+- [X] Customer: Waiting → Good → Leave
 - [ ] UI: order text, timer bar, money counter
 
 **Do NOT build**

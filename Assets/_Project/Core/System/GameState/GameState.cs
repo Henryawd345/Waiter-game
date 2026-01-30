@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameState : MonoBehaviour
 {
     [SerializeField] private float timeOfEachDay = 8; // in minutes
+    [SerializeField] private float startReputation = 100;
 
     // Game states
     public bool isPaused {get; private set;}
@@ -11,6 +12,7 @@ public class GameState : MonoBehaviour
     public float timeOfDayRemaining {get; private set;}
 
     // Player stats
+    public float restaurantReputation{get; private set;}
     public float scoreTotal {get; private set;}
     public float scoreToday {get; private set;}
     public float highScore {get; private set;}
@@ -20,6 +22,7 @@ public class GameState : MonoBehaviour
     // Events for others to subscribe
     public event Action<float> OnMoneyChanged;
     public event Action<float> OnScoreChanged;
+    public event Action<float> OnReputationChanged;
     public event Action<bool> OnPauseChanged;
 
     // singleton
@@ -41,6 +44,7 @@ public class GameState : MonoBehaviour
         isPaused = false;
         dayStarted = false;
         timeOfDayRemaining = timeOfEachDay;
+        restaurantReputation = startReputation;
     }
     public void StartDay()
     {
@@ -58,17 +62,38 @@ public class GameState : MonoBehaviour
         if (scoreTotal > highScore)
             highScore = scoreTotal;
 
-        // OnScoreChanged?.Invoke(amount);
+        OnScoreChanged?.Invoke(amount);
     }
     void AddMoney(float money)
     {
-        if (money >= 0) this.money += money;
+        if (money < 0)
+            return;
+
+        this.money += money;
+        OnMoneyChanged?.Invoke(money);
     }
     public void SetPaused(bool paused)
     {
         isPaused = paused;
         Time.timeScale = paused ? 0f : 1f;
 
-        // OnPaused?.Invoke(paused);
+        OnPauseChanged?.Invoke(paused);
+    }
+    //reputation
+    void OnReputationGain(float amount)
+    {
+        if (amount < 0)
+            return;
+
+        restaurantReputation += amount;
+        OnReputationChanged?.Invoke(amount);
+    }
+    void OnReputationLost(float amount)
+    {
+        if (amount < 0)
+            return;
+
+        restaurantReputation -= amount;
+        OnReputationChanged?.Invoke(-amount);
     }
 }
