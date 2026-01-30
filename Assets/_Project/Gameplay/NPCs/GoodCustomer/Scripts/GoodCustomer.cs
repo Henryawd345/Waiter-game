@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoodCustomer : MonoBehaviour
 {
     // setable variables
-    private double initWaitTimer = 30; // how long it take till customer angry (in seconds)
+    [SerializeField] private double initWaitTimer = 30; // how long it take till customer angry (in seconds)
 
     public Table ownedTable = null;
     private double waitTimer;

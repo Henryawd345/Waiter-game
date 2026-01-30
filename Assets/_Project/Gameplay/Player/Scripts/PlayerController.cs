@@ -20,14 +20,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (walkScript != null)
-            walkScript.Move(inputScript.moveInput, inputScript.isRunningInput);
+        walkScript.Move(inputScript.moveInput, inputScript.isRunningInput);
 
-        if (lookScript != null)
-        {
-            lookScript.MoveHead(inputScript.lookInput);
-            lookScript.HeadBobbing(inputScript.isMoving, inputScript.isRunningInput);
-        }
+        lookScript.MoveHead(inputScript.lookInput);
+        lookScript.HeadBobbing(inputScript.isMoving, inputScript.isRunningInput);
         // Debug.Log(input.moveInput.x + " " + input.moveInput.y);
     }
 }
