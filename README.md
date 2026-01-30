@@ -5,6 +5,18 @@ This is our roadmap that is used to track out progress.
 
 ---
 
+### ''' Important '''
+In each scene if you want the game to work u need at least of the following gameObjects and its children.
+
+- _System
+- _Player
+
+or else the other codes will get null references and error at last. Since I haven't made any exception handlers lol.
+
+-TK
+
+---
+
 ## PHASE 0 — Foundation (Very Short)
 **Goal:** Stable project, no tech friction.
 
