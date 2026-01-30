@@ -11,10 +11,10 @@ This roadmap defines **what to build first, what to delay, and why**, based on y
 **Goal:** Stable project, no tech friction.
 
 **Build**
-- [x] Git + Git LFS
-- [ ] Folder structure
-- [ ] One scene: Prototype_Arena
-- [ ] Floor, walls, counter, 2 tables
+- [X] Git + Git LFS
+- [X] Folder structure
+- [X] One scene: Prototype_Arena
+- [X] Floor, walls, counter, 2 tables
 
 **Do NOT build**
 - Upgrades
@@ -33,9 +33,9 @@ This roadmap defines **what to build first, what to delay, and why**, based on y
 Customer appears → waits → player picks food → delivers → customer leaves
 
 **Build**
-- Player: move, pick up food, deliver
-- Customer: Waiting → Good → Leave
-- UI: order text, timer bar, money counter
+- [ ] Player: move, pick up food, deliver
+- [ ] Customer: Waiting → Good → Leave
+- [ ] UI: order text, timer bar, money counter
 
 **Do NOT build**
 - Combat depth
@@ -51,10 +51,10 @@ Customer appears → waits → player picks food → delivers → customer leave
 **Goal:** Make it a real game.
 
 **Build**
-- Customer BAD state
-- Reputation (global health)
-- Very simple combat (push / punch)
-- Lose condition
+- [ ] Customer BAD state
+- [ ] Reputation (global health)
+- [ ] Very simple combat (push / punch)
+- [ ] Lose condition
 
 **Do NOT build**
 - Upgrades
@@ -70,9 +70,9 @@ Customer appears → waits → player picks food → delivers → customer leave
 **Goal:** Roguelite framework.
 
 **Build**
-- Day / wave timer
-- Between-wave pause
-- Difficulty scaling (faster timers, more customers)
+- [ ] Day / wave timer
+- [ ] Between-wave pause
+- [ ] Difficulty scaling (faster timers, more customers)
 
 **Do NOT build**
 - Luck
@@ -90,14 +90,14 @@ Customer appears → waits → player picks food → delivers → customer leave
 **Build (start small: 6–8 upgrades total)**
 
 Service:
-- Customers wait longer
-- Carry speed increase
-- More money from food
+- [ ] Customers wait longer
+- [ ] Carry speed increase
+- [ ] More money from food
 
 Combat:
-- Knockback increase
-- Faster attack
-- Reduced stun duration
+- [ ] Knockback increase
+- [ ] Faster attack
+- [ ] Reduced stun duration
 
 **Rules**
 - Choose 1 of 3
@@ -117,12 +117,12 @@ Combat:
 **Goal:** Add depth, not noise.
 
 **Build**
-- Luck stat
-- Income formula: Food sales + (Tips × Luck)
-- Luck affects:
-  - Crit chance
-  - Rare upgrade chance
-  - Tip bonus
+- [ ] Luck stat
+- [ ] Income formula: Food sales + (Tips × Luck)
+- [ ] Luck affects:
+  - [ ] Crit chance
+  - [ ] Rare upgrade chance
+  - [ ] Tip bonus
 
 **Do NOT build**
 - Permanent upgrades
@@ -137,10 +137,10 @@ Combat:
 **Goal:** Merge service and combat.
 
 **Build**
-- Tray capacity upgrades
-- Hover tray
-- Weapon pickup
-- Weapon durability & break
+- [ ] Tray capacity upgrades
+- [ ] Hover tray
+- [ ] Weapon pickup
+- [ ] Weapon durability & break
 
 **Limit scope**
 - 1–2 weapon types only
@@ -154,10 +154,10 @@ Combat:
 **Goal:** Memorable runs.
 
 **Build**
-- Food-as-weapon
-- Weapon break effects
-- Risk–reward upgrades
-- Random effects
+- [ ] Food-as-weapon
+- [ ] Weapon break effects
+- [ ] Risk–reward upgrades
+- [ ] Random effects
 
 **Rule**
 - Add chaos only after balance is stable.
