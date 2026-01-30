@@ -76,7 +76,7 @@ public class GameState : MonoBehaviour
     {
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0 : 1;
-        Debug.Log("Paused : " + isPaused);
+        // Debug.Log("Paused : " + isPaused);
 
         OnPauseChanged?.Invoke(isPaused);
     }
