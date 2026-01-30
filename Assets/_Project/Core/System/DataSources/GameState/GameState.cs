@@ -8,7 +8,7 @@ public class GameState : MonoBehaviour
 
     // Game states
     public bool isPaused {get; private set;}
-    public bool dayStarted {get; private set;}
+    public bool isDayStarted {get; private set;}
     public float timeOfDayRemaining {get; private set;}
 
     // Player stats
@@ -26,15 +26,15 @@ public class GameState : MonoBehaviour
     public event Action<bool> OnPauseChanged;
 
     // singleton
-    public static GameState instance {get; private set;}
+    public static GameState GameStateInstance {get; private set;}
     void Awake()
     {
-        if (instance != null && instance != this)
+        if (GameStateInstance != null && GameStateInstance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        GameStateInstance = this;
         // singleton stuff done
 
         // read stuff from save files
@@ -42,13 +42,13 @@ public class GameState : MonoBehaviour
         // saving system not done yet
 
         isPaused = false;
-        dayStarted = false;
+        isDayStarted = false;
         timeOfDayRemaining = timeOfEachDay;
         restaurantReputation = startReputation;
     }
     public void StartDay()
     {
-        dayStarted = true;
+        isDayStarted = true;
         timeOfDayRemaining = timeOfEachDay * 60f;
     }
 
@@ -72,12 +72,13 @@ public class GameState : MonoBehaviour
         this.money += money;
         OnMoneyChanged?.Invoke(money);
     }
-    public void SetPaused(bool paused)
+    public void TogglePause()
     {
-        isPaused = paused;
-        Time.timeScale = paused ? 0f : 1f;
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0 : 1;
+        Debug.Log("Paused : " + isPaused);
 
-        OnPauseChanged?.Invoke(paused);
+        OnPauseChanged?.Invoke(isPaused);
     }
     //reputation
     void OnReputationGain(float amount)

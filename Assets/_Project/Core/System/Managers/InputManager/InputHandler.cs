@@ -4,17 +4,24 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour // Is a singleton
 {
+    // Reference for other scripts
     public Vector2 moveInput { get; private set; }
     public Vector2 lookInput { get; private set; }
     public bool isMoving { get; private set; }
     public bool isRunningInput { get; private set; }
 
-    //Key input maps
-    private KeyCode forward = KeyCode.W;
-    private KeyCode backward = KeyCode.S;
-    private KeyCode left = KeyCode.A;
-    private KeyCode right = KeyCode.D;
-    private KeyCode run = KeyCode.LeftShift;
+    // Key input maps
+    [SerializeField] private KeyCode forward = KeyCode.W;
+    [SerializeField] private KeyCode backward = KeyCode.S;
+    [SerializeField] private KeyCode left = KeyCode.A;
+    [SerializeField] private KeyCode right = KeyCode.D;
+    [SerializeField] private KeyCode run = KeyCode.LeftShift;
+    [SerializeField] private KeyCode pause = KeyCode.Escape;
+    [SerializeField] private KeyCode toggleCursor = KeyCode.C;
+
+    //Events for others to subscribe
+    public event System.Action onPausePressed;
+    public event System.Action onToggleCursorPressed;
 
     // Singleton
     public static InputHandler InputHandlerInstance { get; private set; }
@@ -56,5 +63,10 @@ public class InputHandler : MonoBehaviour // Is a singleton
         //--------------------------------------------------------------------------//
         // UI Input (Maybe)
         //--------------------------------------------------------------------------//
+        if (Input.GetKeyDown(pause))
+            onPausePressed?.Invoke();
+        if (Input.GetKeyDown(toggleCursor))
+            onToggleCursorPressed?.Invoke();
+
     }
 }
