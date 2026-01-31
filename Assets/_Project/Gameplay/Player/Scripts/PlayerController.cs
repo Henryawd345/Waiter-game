@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerLocator playerLocator = new PlayerLocator(); // a class is _System
     private InputHandler inputScript;
     private PlayerWalk walkScript;
     private PlayerLook lookScript;
@@ -19,7 +18,7 @@ public class PlayerController : MonoBehaviour
     {
         // since its singleton it must be load after awake() done to avoid race condition which already happened lol
         inputScript = InputHandler.InputHandlerInstance;
-        playerLocator.register(this.transform);
+        PlayerLocator.register(this.transform);
         gameState = GameState.GameStateInstance;
     }
 

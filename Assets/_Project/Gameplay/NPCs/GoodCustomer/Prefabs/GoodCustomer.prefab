@@ -279,7 +279,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 0.00001
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -295,6 +295,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d95b659036ad74e9bd157828e2386e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  InitialWaitTime: 30
+  EatTime: 5
+  BecomeBadCustomerChance: 25
+  orderPrefab: {fileID: 0}
+  ownedTable: {fileID: 0}
+  currentOrder: {fileID: 0}
 --- !u!114 &5794750368021807633
 MonoBehaviour:
   m_ObjectHideFlags: 0
