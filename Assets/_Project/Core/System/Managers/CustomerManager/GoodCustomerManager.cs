@@ -9,14 +9,16 @@ public class GoodCustomerManager : MonoBehaviour
 
     [SerializeField] private GoodCustomer goodCustomerPrefab;
     private GameObject customerSpawnPoint;
+    private GameObject goodCustomerRoot;
+    private GameObject tableRoot;
     private List<GoodCustomer> goodCustomersList = new();
     private List<Table> tablesList = new();
 
     void Start()
     {
-        GameObject goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
-        GameObject tableRoot = GameObject.Find("_GameplayObjects/Tables");
-        GameObject customerSpawnPoint = GameObject.Find("_EventLocations/CustomerSpawnPoint");
+        goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
+        tableRoot = GameObject.Find("_GameplayObjects/Tables");
+        customerSpawnPoint = GameObject.Find("_EventLocations/CustomerSpawnPoint");
 
         if (goodCustomerRoot == null || tableRoot == null)
         {
@@ -34,8 +36,9 @@ public class GoodCustomerManager : MonoBehaviour
         {
             GoodCustomer newCustomer = Instantiate(goodCustomerPrefab);
             newCustomer.transform.parent = GameObject.Find("_NPCs/GoodCustomers").transform;
-            newCustomer.gameObject.SetActive(false);
+            newCustomer.SetExitLocation(customerSpawnPoint.transform.position);
             newCustomer.RegisterManager(this);
+            newCustomer.gameObject.SetActive(false);
             goodCustomersList.Add(newCustomer);
         }
 
@@ -46,6 +49,7 @@ public class GoodCustomerManager : MonoBehaviour
     public void StartDay()
     {
         // customer spawn loop
+        Debug.Log("Day started!");
         StartCoroutine(CustomerSpawnLoop());
     }
     void TrySpawnCustomer()

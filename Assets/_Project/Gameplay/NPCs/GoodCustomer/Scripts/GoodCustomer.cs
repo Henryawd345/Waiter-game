@@ -13,14 +13,14 @@ public class GoodCustomer : MonoBehaviour
     // Prefabs
     [SerializeField] private Order orderPrefab;
 
-    public Table ownedTable = null;
+    public Table ownedTable;
     public Order currentOrder;
     private float waitTimer;
     private float eatingTime;
     private GoodCustomerMovement movementScript;
     private GoodCustomerStates customerState = GoodCustomerStates.Waiting;
     private GoodCustomerManager boundManager;
-    private Transform exitPosition;
+    private Vector3 exitPosition;
 
     void Awake()
     {
@@ -31,7 +31,7 @@ public class GoodCustomer : MonoBehaviour
         if (customerState == GoodCustomerStates.WalkingToTable && movementScript.HasArrived())
             SitAndOrder();
         if ((customerState == GoodCustomerStates.LeaveHapply || customerState == GoodCustomerStates.Angry) && movementScript.HasArrived())
-            Destroy(this.gameObject);
+            boundManager.ReturnToPool(this);
 
         if (customerState == GoodCustomerStates.Seated)
         {
@@ -59,6 +59,7 @@ public class GoodCustomer : MonoBehaviour
             {
                 ownedTable = currTable;
                 movementScript.MoveTo(ownedTable.accessPointTransform.position);
+                customerState = GoodCustomerStates.WalkingToTable;
                 return;
             }
         }
@@ -88,6 +89,8 @@ public class GoodCustomer : MonoBehaviour
 
     private void LeaveTable(GoodCustomerLeaveReason reason)
     {
+        if (currentOrder != null)
+            Destroy(currentOrder.gameObject);
         // withMood true = good, false = bad
         if (reason == GoodCustomerLeaveReason.Happy)
         {
@@ -95,7 +98,7 @@ public class GoodCustomer : MonoBehaviour
             // increase score and reputation
             // act happy
             customerState = GoodCustomerStates.LeaveHapply;
-            movementScript.MoveToExit();
+            movementScript.MoveTo(exitPosition);
         }
         else if (reason == GoodCustomerLeaveReason.Angry)
         {
@@ -105,7 +108,7 @@ public class GoodCustomer : MonoBehaviour
             {
                 DoneEating();
                 // BadCustomer bad = gameObject.AddComponent<BadCustomer>();
-                Destroy(this.gameObject);
+                boundManager.ReturnToPool(this);
             }
             else // leave peacefully
             {
@@ -113,7 +116,7 @@ public class GoodCustomer : MonoBehaviour
                 // reduce score and reputation
                 // act angry
                 customerState = GoodCustomerStates.Angry;
-                movementScript.MoveToExit();
+                movementScript.MoveTo(exitPosition);
             }
         }
     }
@@ -141,5 +144,9 @@ public class GoodCustomer : MonoBehaviour
         customerState = GoodCustomerStates.Waiting;
         waitTimer = 0;
         eatingTime = 0;
+    }
+    public void SetExitLocation(Vector3 position)
+    {
+        exitPosition = position;
     }
 }

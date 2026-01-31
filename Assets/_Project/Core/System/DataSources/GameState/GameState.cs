@@ -25,6 +25,7 @@ public class GameState : MonoBehaviour
     public event Action<float> OnReputationChanged;
     public event Action<bool> OnPauseChanged;
     public event Action DayStarted;
+    public event Action DayEnded;
 
     // singleton
     public static GameState GameStateInstance {get; private set;}
@@ -49,8 +50,20 @@ public class GameState : MonoBehaviour
     }
     public void StartDay()
     {
-        isDayStarted = true;
-        timeOfDayRemaining = timeOfEachDay * 60f;
+        if (isDayStarted == false)
+        {
+            isDayStarted = true;
+            timeOfDayRemaining = timeOfEachDay * 60f;
+            DayStarted?.Invoke();
+        }
+    }
+    public void EndDay()
+    {
+        if (isDayStarted == true)
+        {
+            isDayStarted = false;
+            DayEnded?.Invoke();
+        }
     }
 
     public void AddScore(float amount)

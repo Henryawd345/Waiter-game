@@ -12,7 +12,7 @@ public class Table : MonoBehaviour
     private Transform playerTransform;
     void Awake()
     {
-        accessPointTransform = transform.Find("PosHolders/AccessLocationPos");
+        accessPointTransform = transform.Find("PosHolders/AccessPointPos");
         chairTransform = transform.Find("PosHolders/ChairPos");
         orderAnchorPos = transform.Find("PosHolders/OrderAnchorPos");
         playerTransform = PlayerLocator.PlayerTransform;

@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        goodCustomerManager = GetComponent<GoodCustomerManager>();
+        goodCustomerManager = transform.parent.GetComponentInChildren<GoodCustomerManager>();
 
         // since game start with not paused so mouse will disappear at first load
         Cursor.visible = false;
@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 
         inputHandler.onPausePressed += PauseButtonPressed;
         inputHandler.onToggleCursorPressed += ToggleCursorButtonPressed;
+        inputHandler.onDayStartPressed += DayStartButtomPressed;
 
         gameState.DayStarted += DayStarted;
     }
@@ -29,6 +30,9 @@ public class GameManager : MonoBehaviour
     {   // start every events
         goodCustomerManager.StartDay();
     }
+
+
+    // Button Pressed Managing
     void PauseButtonPressed()
     {
         gameState.TogglePause();
@@ -46,5 +50,9 @@ public class GameManager : MonoBehaviour
     void ToggleCursorButtonPressed()
     {
         
+    }
+    void DayStartButtomPressed()
+    {
+        gameState.StartDay();
     }
 }

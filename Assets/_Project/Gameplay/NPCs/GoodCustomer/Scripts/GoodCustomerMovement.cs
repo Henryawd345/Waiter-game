@@ -10,15 +10,15 @@ public class GoodCustomerMovement : MonoBehaviour
     {
         navAgent = GetComponent<NavMeshAgent>();
         customerSelf = GetComponent<GoodCustomer>();
+
+        navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
     }
+
     public void MoveTo(Vector3 position)
     {
         navAgent.SetDestination(position);
     }
-    public void MoveToExit()
-    {
-        navAgent.SetDestination(new Vector3(0,0,0)); // gonna be exit location
-    }
+
     public bool HasArrived()
     {
         if (navAgent.pathPending)
@@ -29,6 +29,7 @@ public class GoodCustomerMovement : MonoBehaviour
     }
     public void Warp(Vector3 pos)
     {
+        navAgent.ResetPath();
         navAgent.Warp(pos);
     }
 }
