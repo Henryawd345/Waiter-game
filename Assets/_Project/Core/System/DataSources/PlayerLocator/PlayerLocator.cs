@@ -6,7 +6,6 @@ public class PlayerLocator : MonoBehaviour
     public static void register(Transform playerTransform)
     {
         PlayerTransform = playerTransform;
-        Debug.Log("player registered!");
     }
     public static void unregister(Transform playerTransform)
     {

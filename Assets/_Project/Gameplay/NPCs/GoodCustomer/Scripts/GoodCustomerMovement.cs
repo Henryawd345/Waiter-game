@@ -11,7 +11,6 @@ public class GoodCustomerMovement : MonoBehaviour
         navAgent = GetComponent<NavMeshAgent>();
         customerSelf = GetComponent<GoodCustomer>();
     }
-
     public void MoveTo(Vector3 position)
     {
         navAgent.SetDestination(position);
@@ -20,7 +19,6 @@ public class GoodCustomerMovement : MonoBehaviour
     {
         navAgent.SetDestination(new Vector3(0,0,0)); // gonna be exit location
     }
-
     public bool HasArrived()
     {
         if (navAgent.pathPending)

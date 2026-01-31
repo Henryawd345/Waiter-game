@@ -20,6 +20,7 @@ public class GoodCustomer : MonoBehaviour
     private GoodCustomerMovement movementScript;
     private GoodCustomerStates customerState = GoodCustomerStates.Waiting;
     private GoodCustomerManager boundManager;
+    private Transform exitPosition;
 
     void Awake()
     {
