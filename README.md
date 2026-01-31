@@ -17,6 +17,46 @@ or else the other codes will get null references and error at last. Since I have
 
 ---
 
+# Tasks
+
+### Henry
+| Status | Done%(Aprox) | Task |
+|:-:|:-:|:-|
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+
+### TK
+| Status | Done%(Aprox) | Task |
+|:-:|:-:|:-|
+|[]| 70% | Character Movements (Basic) |
+|[x]| 100% | Good Customer System |
+|[x]| 100% | Table System |
+|[x]| 100% | Ordering System |
+|[]| 60% | Game Manager |
+|[]| 0% | Gameplay Loop (No Bad yet) |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+|[]| 0% | |
+
+---
+---
+---
+---
+---
+
 ## PHASE 0 — Foundation (Very Short)
 **Goal:** Stable project, no tech friction.
 
