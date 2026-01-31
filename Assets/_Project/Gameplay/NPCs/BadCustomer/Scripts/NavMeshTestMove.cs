@@ -5,7 +5,7 @@ public class NavMeshTestMove : MonoBehaviour
 {
     private NavMeshAgent agent;
 
-    Transform playerTransform = PlayerLocator.PlayerTransform;
+    Transform playerTransform;
 
     void Awake()
     {
@@ -21,16 +21,15 @@ public class NavMeshTestMove : MonoBehaviour
         }
 
         // Test target point (change this if you want)
+        playerTransform = PlayerLocator.PlayerTransform;
 
-        Vector3 target = Vector3.zero;
-        //Vector3 target = playerTransform.position;
-
-        agent.SetDestination(target);
-        Debug.Log("SetDestination to " + target);
-    }
+            }
 
     void Update()
     {
+        Vector3 target = playerTransform.position;
+
+        agent.SetDestination(target);
         Debug.Log("PLayer location" + transform.position.x);
     }
 }
