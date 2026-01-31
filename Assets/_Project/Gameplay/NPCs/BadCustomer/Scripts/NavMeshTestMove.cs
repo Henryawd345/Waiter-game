@@ -22,8 +22,7 @@ public class NavMeshTestMove : MonoBehaviour
 
         // Test target point (change this if you want)
         playerTransform = PlayerLocator.PlayerTransform;
-
-            }
+    }
 
     void Update()
     {

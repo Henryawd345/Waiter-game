@@ -13,12 +13,13 @@ public class PlayerController : MonoBehaviour
     {
         walkScript = this.GetComponent<PlayerWalk>();
         lookScript = this.GetComponent<PlayerLook>();
+
+        PlayerLocator.register(this.transform); // register self transform to singleton before start (bc other codes will read from start and this will solve race condition problem)
     }
     void Start()
     {
         // since its singleton it must be load after awake() done to avoid race condition which already happened lol
         inputScript = InputHandler.InputHandlerInstance;
-        PlayerLocator.register(this.transform);
         gameState = GameState.GameStateInstance;
     }
 
