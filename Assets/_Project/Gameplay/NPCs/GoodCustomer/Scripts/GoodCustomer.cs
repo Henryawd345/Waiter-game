@@ -10,13 +10,16 @@ public class GoodCustomer : MonoBehaviour
     [SerializeField] private float EatTime = 5; // how long it take till customer angry (in seconds)
     [SerializeField] int BecomeBadCustomerChance = 25; // in percent %
 
+    // Prefabs
+    [SerializeField] private Order orderPrefab;
+
     public Table ownedTable = null;
     public Order currentOrder;
     private float waitTimer;
     private float eatingTime;
     private GoodCustomerMovement movementScript;
     private GoodCustomerStates customerState = GoodCustomerStates.Waiting;
-    [SerializeField] private Order orderPrefab;
+    private GoodCustomerManager boundManager;
 
     void Awake()
     {
@@ -65,6 +68,7 @@ public class GoodCustomer : MonoBehaviour
         if (ownedTable == null)
             return;
 
+        waitTimer = InitialWaitTime;
         customerState = GoodCustomerStates.Seated;
         ownedTable.Sit(this);
 
@@ -74,8 +78,6 @@ public class GoodCustomer : MonoBehaviour
         currentOrder = Instantiate(orderPrefab);
         currentOrder.Init(this);
         ownedTable.attachOrderToTable(currentOrder);
-
-        waitTimer = InitialWaitTime;
     }
     public void OnOrderCompleted()
     {
@@ -124,5 +126,19 @@ public class GoodCustomer : MonoBehaviour
     public void ApplyAnnoyance(float annoyLevel = 1f) // will be called by BadCustomers
     {
         waitTimer -= annoyLevel;
+    }
+
+    public void RegisterManager(GoodCustomerManager manager)
+    {
+        if (boundManager == null && boundManager != manager)
+            boundManager = manager;
+    }
+
+    public void ResetStateSelf()
+    {
+        ownedTable = null;
+        customerState = GoodCustomerStates.Waiting;
+        waitTimer = 0;
+        eatingTime = 0;
     }
 }

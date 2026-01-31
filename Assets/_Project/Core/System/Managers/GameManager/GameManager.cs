@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private CustomerManager customerManager;
+    private GoodCustomerManager goodCustomerManager;
     private InputHandler inputHandler;
     private GameState gameState;
 
     void Awake()
     {
-        customerManager = GetComponent<CustomerManager>();
+        goodCustomerManager = GetComponent<GoodCustomerManager>();
 
         // since game start with not paused so mouse will disappear at first load
         Cursor.visible = false;
@@ -21,18 +21,13 @@ public class GameManager : MonoBehaviour
 
         inputHandler.onPausePressed += PauseButtonPressed;
         inputHandler.onToggleCursorPressed += ToggleCursorButtonPressed;
+
+        gameState.DayStarted += DayStarted;
     }
 
-    void Update()
-    {
-        ControlOtherManagers();
-    }
-    void ControlOtherManagers()
-    {
-        if (gameState.isDayStarted && !gameState.isPaused)
-        {
-            //customerManager.
-        }
+    void DayStarted()
+    {   // start every events
+        goodCustomerManager.StartDay();
     }
     void PauseButtonPressed()
     {

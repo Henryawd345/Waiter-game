@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerLocator playerLocator; // a class is _System
-
+    private PlayerLocator playerLocator = new PlayerLocator(); // a class is _System
     private InputHandler inputScript;
     private PlayerWalk walkScript;
     private PlayerLook lookScript;
@@ -15,7 +14,6 @@ public class PlayerController : MonoBehaviour
     {
         walkScript = this.GetComponent<PlayerWalk>();
         lookScript = this.GetComponent<PlayerLook>();
-        playerLocator = GameObject.Find("_System/Datas/PlayerLocator").transform.GetComponent<PlayerLocator>();
     }
     void Start()
     {

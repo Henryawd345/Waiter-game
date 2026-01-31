@@ -24,6 +24,7 @@ public class GameState : MonoBehaviour
     public event Action<float> OnScoreChanged;
     public event Action<float> OnReputationChanged;
     public event Action<bool> OnPauseChanged;
+    public event Action DayStarted;
 
     // singleton
     public static GameState GameStateInstance {get; private set;}

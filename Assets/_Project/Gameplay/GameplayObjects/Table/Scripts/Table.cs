@@ -22,16 +22,19 @@ public class Table : MonoBehaviour
     }
     void Update()
     {
-        // make orderAnchor always spin face the player
-        Vector3 playerPos = playerTransform.position;
-        Vector3 anchorPos = orderAnchorPos.position;
+        if (playerTransform != null)
+        {
+            // make orderAnchor always spin face the player
+            Vector3 playerPos = playerTransform.position;
+            Vector3 anchorPos = orderAnchorPos.position;
 
-        playerPos.y = anchorPos.y;
+            playerPos.y = anchorPos.y;
 
-        Vector3 direction = playerPos - anchorPos;
+            Vector3 direction = playerPos - anchorPos;
 
-        if (direction.sqrMagnitude > 0.001f)
-            orderAnchorPos.rotation = Quaternion.LookRotation(direction);
+            if (direction.sqrMagnitude > 0.001f)
+                orderAnchorPos.rotation = Quaternion.LookRotation(direction);
+        }
     }
 
     public bool requestTable(GoodCustomer customer)
