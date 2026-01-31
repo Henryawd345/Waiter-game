@@ -15,10 +15,13 @@ public class Table : MonoBehaviour
         accessPointTransform = transform.Find("PosHolders/AccessPointPos");
         chairTransform = transform.Find("PosHolders/ChairPos");
         orderAnchorPos = transform.Find("PosHolders/OrderAnchorPos");
-        playerTransform = PlayerLocator.PlayerTransform;
 
         occupationState = TableStates.Free;
         occupier = null;
+    }
+    void Start()
+    {
+        playerTransform = PlayerLocator.PlayerTransform;
     }
     void Update()
     {
