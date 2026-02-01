@@ -3,10 +3,13 @@ using UnityEngine.AI;
 
 public class RudeCustomerMovement : MonoBehaviour
 {
-    [SerializeField] private float rudeCustomerSpeed = 100f;
-    [SerializeField] private float rudeCustomerAcceleration = 100f;
+    [SerializeField] private float rudeCustomerSpeed = 4f;
+    [SerializeField] private float rudeCustomerAcceleration = 8f;
+    [SerializeField] private float updateRate = 0.25f;
+    [SerializeField] private float detectionRange = 6f;
     private NavMeshAgent agent;
     Transform playerTransform;
+    private float targetUpdateTime;
 
     void Awake()
     {
@@ -23,7 +26,24 @@ public class RudeCustomerMovement : MonoBehaviour
 
     void Update()
     {
-        // Vector3 target = playerTransform.position;
-        // agent.SetDestination(target);
+
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distanceToPlayer > detectionRange) // if distance from player is larger than bad cus range stopped
+        {
+            agent.isStopped = true;
+            return;
+        }
+            agent.isStopped = false;
+
+
+        if (Time.time < targetUpdateTime) // Wait until the next allowed update time
+        {
+            return;
+        }
+
+        targetUpdateTime = Time.time + updateRate;
+
+        agent.SetDestination(playerTransform.position);
     }
 }
