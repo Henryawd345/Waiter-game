@@ -793,6 +793,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c026d2163cc7646478ac5a5bd4e06ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavMeshTestMove
+  rudeCustomerSpeed: 8
+  rudeCustomerAcceleration: 12
+  updateRate: 0.25
+  detectionRange: 20
+  minRoamDistance: 2
+  roamRadius: 15
+  minNewTargetDistanceFromLast: 1.5
 --- !u!1001 &741730452
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -801,9 +808,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1551510293}
     m_Modifications:
+    - target: {fileID: 115823502640391436, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
+      propertyPath: m_Speed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 115823502640391436, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4795014551685664041, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.627
+      value: -14.03
       objectReference: {fileID: 0}
     - target: {fileID: 4795014551685664041, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
       propertyPath: m_LocalPosition.y
@@ -811,7 +826,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4795014551685664041, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.54032
+      value: -11.96
       objectReference: {fileID: 0}
     - target: {fileID: 4795014551685664041, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -845,7 +860,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: BadCustomer
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7828202362934410013, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7828202362934410013, guid: 97f177f02d393fb4c8dd83a552aa18ca, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1013,7 +1033,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 04df1643fd88ce2478b2192dd6eecb58, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 587355d98947cbc44ad2597b7c46eeea, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &837504111
 Transform:
@@ -1399,6 +1419,7 @@ MonoBehaviour:
   run: 304
   pause: 27
   toggleCursor: 99
+  startDay: 112
 --- !u!4 &1723437291 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2502768468055784653, guid: b71eb5b36136ca7448eb53eb33e88644, type: 3}

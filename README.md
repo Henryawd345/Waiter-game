@@ -22,7 +22,7 @@ or else the other codes will get null references and error at last. Since I have
 ### Henry
 | Status | Done%(Aprox) | Task |
 |:-:|:-:|:-|
-|[]| 0% | |
+|[]| 60% | Bad customer system|
 |[]| 0% | |
 |[]| 0% | |
 |[]| 0% | |
