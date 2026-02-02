@@ -5,7 +5,7 @@ using UnityEngine;
 public class RudeCustomer : MonoBehaviour
 {
         [Header("Repath update")]
-    [SerializeField] private float updateRate = 0.25f;
+    // [SerializeField] private float updateRate = 0.25f;
     [Header("Detection")]
     [SerializeField] private float detectionRange = 6f;
 
@@ -51,9 +51,9 @@ public class RudeCustomer : MonoBehaviour
         RudeCustomerStates desiredState = distance <= detectionRange ? RudeCustomerStates.Chasing : RudeCustomerStates.Roaming;
         ChangeState(desiredState);
     }
-    void ChangeState(RudeCustomerStates newState)
+    void ChangeState(RudeCustomerStates newState, bool forceRestart = false)
     {
-        if (currentRudeCustomerState == newState)
+        if (!forceRestart && currentRudeCustomerState == newState)
             return;
 
         rudeCustomerMovement.Stop();
@@ -99,7 +99,7 @@ public class RudeCustomer : MonoBehaviour
         while (true)
         {
             rudeCustomerMovement.MoveTo(playerTransform.position);
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
         }
     }
     IEnumerator RoamState()
@@ -136,14 +136,17 @@ public class RudeCustomer : MonoBehaviour
 
             if (target != null)
             {
-                target.ApplyAnnoyance(5);
+                if (Random.Range(0, 3) == 0) // 1/3 chance they will change table
+                    ChangeState(RudeCustomerStates.Roaming, true);
+                else
+                    target.ApplyAnnoyance(2);
             }
 
             yield return new WaitForSeconds(1f);
         }
 
         // Table is now empty
-        yield break;
+        ChangeState(RudeCustomerStates.Roaming, true);
     }
     private Table PickRandomTable()
     {

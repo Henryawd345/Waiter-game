@@ -9,31 +9,20 @@ public class RudeCustomerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float rudeCustomerSpeed = 4f;
     [SerializeField] private float rudeCustomerAcceleration = 8f;
-    [Header("Repath update")]
-    [SerializeField] private float updateRate = 0.25f;
-    [Header("Detection")]
-    [SerializeField] private float detectionRange = 6f;
-
-    [Header("Roaming")]
-    [SerializeField] private float minRoamDistance = 2f;
-    [SerializeField] private float roamRadius = 6f;
-    //[SerializeField] private float minWaitTime = 0.7f;
-    //[SerializeField] private float maxWaitTime = 1.8f;
-    [SerializeField] private float minNewTargetDistanceFromLast = 1.5f;
 
     private NavMeshAgent badAgent;
-    private RudeCustomer badSelf;
 
     void Awake()
     {
         badAgent = GetComponent<NavMeshAgent>();
-        badSelf = GetComponent<RudeCustomer>();
     }
 
     void Start()
     {
         badAgent.speed = rudeCustomerSpeed;
         badAgent.acceleration = rudeCustomerAcceleration;
+
+        badAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
     }
 
     public void MoveTo(Vector3 position)
