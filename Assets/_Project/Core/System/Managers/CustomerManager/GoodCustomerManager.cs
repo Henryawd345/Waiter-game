@@ -10,24 +10,21 @@ public class GoodCustomerManager : MonoBehaviour
     [SerializeField] private GoodCustomer goodCustomerPrefab;
     private GameObject customerSpawnPoint;
     private GameObject goodCustomerRoot;
-    private GameObject tableRoot;
     private List<GoodCustomer> goodCustomersList = new();
     private List<Table> tablesList = new();
+    private GameplayObjectList gameplayObjectList;
 
     void Start()
     {
-        goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
-        tableRoot = GameObject.Find("_GameplayObjects/Tables");
-        customerSpawnPoint = GameObject.Find("_EventLocations/CustomerSpawnPoint");
+        gameplayObjectList = GameplayObjectList.Instance;
 
-        if (goodCustomerRoot == null || tableRoot == null)
+        goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
+        customerSpawnPoint = gameplayObjectList.customerSpawnPoint.gameObject;
+        tablesList = gameplayObjectList.tablesList;
+
+        if (goodCustomerRoot == null)
         {
-            Debug.Log("No root for GoodCustomer or TableRoot found!");
-            return;
-        }
-        if (customerSpawnPoint == null)
-        {
-            Debug.Log("No customer spawn point found!");
+            Debug.Log("Good Customer Root gameObject doesn't exist!");
             return;
         }
 
@@ -44,7 +41,7 @@ public class GoodCustomerManager : MonoBehaviour
 
         tablesList.AddRange(GameObject.Find("_GameplayObjects/Tables").GetComponentsInChildren<Table>(includeInactive: true));
 
-        Debug.Log("Start with\n" + goodCustomersList.Count + " customers and " + tablesList.Count + " tables");
+        Debug.Log("Start with " + goodCustomersList.Count + " customers");
     }
     public void StartDay()
     {

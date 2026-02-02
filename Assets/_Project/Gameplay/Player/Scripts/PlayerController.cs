@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     {
         // since its singleton it must be load after awake() done to avoid race condition which already happened lol
         inputScript = InputHandler.InputHandlerInstance;
-        gameState = GameState.GameStateInstance;
+        gameState = GameState.Instance;
     }
 
     void Update()

@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         inputHandler = InputHandler.InputHandlerInstance;
-        gameState = GameState.GameStateInstance;
+        gameState = GameState.Instance;
 
         inputHandler.onPausePressed += PauseButtonPressed;
         inputHandler.onToggleCursorPressed += ToggleCursorButtonPressed;

@@ -28,15 +28,15 @@ public class GameState : MonoBehaviour
     public event Action DayEnded;
 
     // singleton
-    public static GameState GameStateInstance {get; private set;}
+    public static GameState Instance {get; private set;}
     void Awake()
     {
-        if (GameStateInstance != null && GameStateInstance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        GameStateInstance = this;
+        Instance = this;
         // singleton stuff done
 
         // read stuff from save files
