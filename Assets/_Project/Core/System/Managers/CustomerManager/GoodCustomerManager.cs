@@ -13,10 +13,13 @@ public class GoodCustomerManager : MonoBehaviour
     private List<GoodCustomer> goodCustomersList = new();
     private List<Table> tablesList = new();
     private GameplayObjectList gameplayObjectList;
+    private GameState gameState;
+    private GameManager gameManager;
 
     void Start()
     {
         gameplayObjectList = GameplayObjectList.Instance;
+        gameState = GameState.Instance;
 
         goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
         customerSpawnPoint = gameplayObjectList.customerSpawnPoint.gameObject;
@@ -33,21 +36,36 @@ public class GoodCustomerManager : MonoBehaviour
         {
             GoodCustomer newCustomer = Instantiate(goodCustomerPrefab);
             newCustomer.transform.parent = GameObject.Find("_NPCs/GoodCustomers").transform;
-            newCustomer.SetExitLocation(customerSpawnPoint.transform.position);
-            newCustomer.RegisterManager(this);
+            newCustomer.Init(this, customerSpawnPoint.transform.position);
             newCustomer.gameObject.SetActive(false);
             goodCustomersList.Add(newCustomer);
         }
 
-        tablesList.AddRange(GameObject.Find("_GameplayObjects/Tables").GetComponentsInChildren<Table>(includeInactive: true));
-
-        Debug.Log("Start with " + goodCustomersList.Count + " customers");
+        Debug.Log("Start with " + goodCustomersList.Count + " good customers");
     }
     public void StartDay()
     {
         // customer spawn loop
-        Debug.Log("Day started!");
         StartCoroutine(CustomerSpawnLoop());
+    }
+    public void EndDay()
+    {
+        StopCoroutine(CustomerSpawnLoop());
+        foreach (GoodCustomer currentCustomer in goodCustomersList)
+        {
+            currentCustomer.ResetStateSelf();
+            ReturnToPool(currentCustomer);
+        }
+    }
+    IEnumerator CustomerSpawnLoop()
+    {
+        while (true)
+        {
+            float delay = Random.Range(5f, 7f);
+            yield return new WaitForSeconds(delay);
+
+            TrySpawnCustomer();
+        }
     }
     void TrySpawnCustomer()
     {
@@ -83,14 +101,12 @@ public class GoodCustomerManager : MonoBehaviour
         }
         return false;
     }
-    IEnumerator CustomerSpawnLoop()
+    public void RegisterGameManager(GameManager manager)
     {
-        while (true)
-        {
-            float delay = Random.Range(5f, 7f);
-            yield return new WaitForSeconds(delay);
-
-            TrySpawnCustomer();
-        }
+        gameManager = manager;
+    }
+    public void TrySpawnRudeCustomer(Vector3 position)
+    {
+        gameManager.SpawnRudeCustomer(position);
     }
 }

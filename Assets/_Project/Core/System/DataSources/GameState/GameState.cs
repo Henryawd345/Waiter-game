@@ -20,12 +20,12 @@ public class GameState : MonoBehaviour
     public int DaysPassed {get; private set;}
 
     // Events for others to subscribe
-    public event Action<float> OnMoneyChanged;
-    public event Action<float> OnScoreChanged;
-    public event Action<float> OnReputationChanged;
-    public event Action<bool> OnPauseChanged;
-    public event Action DayStarted;
-    public event Action DayEnded;
+    public event Action<float> OnMoneyChangedEvent;
+    public event Action<float> OnScoreChangedEvent;
+    public event Action<float> OnReputationChangedEvent;
+    public event Action<bool> OnPauseChangedEvent;
+    public event Action OnDayStartedEvent;
+    public event Action OnDayEndedEvent;
 
     // singleton
     public static GameState Instance {get; private set;}
@@ -54,7 +54,7 @@ public class GameState : MonoBehaviour
         {
             isDayStarted = true;
             timeOfDayRemaining = timeOfEachDay * 60f;
-            DayStarted?.Invoke();
+            OnDayStartedEvent?.Invoke();
         }
     }
     public void EndDay()
@@ -62,7 +62,7 @@ public class GameState : MonoBehaviour
         if (isDayStarted == true)
         {
             isDayStarted = false;
-            DayEnded?.Invoke();
+            OnDayEndedEvent?.Invoke();
         }
     }
 
@@ -76,7 +76,7 @@ public class GameState : MonoBehaviour
         if (scoreTotal > highScore)
             highScore = scoreTotal;
 
-        OnScoreChanged?.Invoke(amount);
+        OnScoreChangedEvent?.Invoke(amount);
     }
     void AddMoney(float money)
     {
@@ -84,7 +84,7 @@ public class GameState : MonoBehaviour
             return;
 
         this.money += money;
-        OnMoneyChanged?.Invoke(money);
+        OnMoneyChangedEvent?.Invoke(money);
     }
     public void TogglePause()
     {
@@ -92,7 +92,7 @@ public class GameState : MonoBehaviour
         Time.timeScale = isPaused ? 0 : 1;
         // Debug.Log("Paused : " + isPaused);
 
-        OnPauseChanged?.Invoke(isPaused);
+        OnPauseChangedEvent?.Invoke(isPaused);
     }
     //reputation
     void OnReputationGain(float amount)
@@ -101,7 +101,7 @@ public class GameState : MonoBehaviour
             return;
 
         restaurantReputation += amount;
-        OnReputationChanged?.Invoke(amount);
+        OnReputationChangedEvent?.Invoke(amount);
     }
     void OnReputationLost(float amount)
     {
@@ -109,6 +109,6 @@ public class GameState : MonoBehaviour
             return;
 
         restaurantReputation -= amount;
-        OnReputationChanged?.Invoke(-amount);
+        OnReputationChangedEvent?.Invoke(-amount);
     }
 }

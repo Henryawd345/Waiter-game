@@ -6,7 +6,7 @@ using UnityEngine.InputSystem.LowLevel;
 public class GoodCustomer : MonoBehaviour
 {
     // variables
-    [SerializeField] private float InitialWaitTime = 30; // how long it take till customer angry (in seconds)
+    [SerializeField] private float InitialWaitTime = 80; // how long it take till customer angry (in seconds)
     [SerializeField] private float EatTime = 5; // how long it take till customer angry (in seconds)
     [SerializeField] int BecomeBadCustomerChance = 25; // in percent %
 
@@ -106,8 +106,8 @@ public class GoodCustomer : MonoBehaviour
             becomeBadInt = Random.Range(1,101);
             if (becomeBadInt <= BecomeBadCustomerChance) //become bad customer
             {
+                boundManager.TrySpawnRudeCustomer(ownedTable.accessPointTransform.position + new Vector3(0, 2, 0));
                 DoneEating();
-                // BadCustomer bad = gameObject.AddComponent<BadCustomer>();
                 boundManager.ReturnToPool(this);
             }
             else // leave peacefully
@@ -131,13 +131,6 @@ public class GoodCustomer : MonoBehaviour
     {
         waitTimer -= annoyLevel;
     }
-
-    public void RegisterManager(GoodCustomerManager manager)
-    {
-        if (boundManager == null && boundManager != manager)
-            boundManager = manager;
-    }
-
     public void ResetStateSelf()
     {
         ownedTable = null;
@@ -145,8 +138,11 @@ public class GoodCustomer : MonoBehaviour
         waitTimer = 0;
         eatingTime = 0;
     }
-    public void SetExitLocation(Vector3 position)
+    public void Init(GoodCustomerManager manager, Vector3 exitPosition)
     {
-        exitPosition = position;
+        if (boundManager == null || boundManager != manager)
+            boundManager = manager;
+        this.exitPosition = exitPosition;
+        ResetStateSelf();
     }
 }

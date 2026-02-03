@@ -25,6 +25,7 @@ public class RudeCustomer : MonoBehaviour
     private RudeCustomerMovement rudeCustomerMovement;
     private GameplayObjectList gameplayObjectList;
     private Coroutine stateRoutine;
+    private RudeCustomerManager boundManager;
 
     void Awake()
     {
@@ -163,5 +164,16 @@ public class RudeCustomer : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ResetStateSelf()
+    {
+        currentRudeCustomerState = RudeCustomerStates.Chasing;
+    }
+    public void Init(RudeCustomerManager manager)
+    {
+        if (boundManager == null || boundManager != manager)
+            boundManager = manager;
+        ResetStateSelf();
     }
 }
