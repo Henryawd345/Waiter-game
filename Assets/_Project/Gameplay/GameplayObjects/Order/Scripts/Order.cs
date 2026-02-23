@@ -42,13 +42,13 @@ public class Order : MonoBehaviour
 
     private void TryServeFood(FoodItem food)
     {
-        if (servedFood.Contains(food.FoodType))
+        if (servedFood.Contains(food.foodType))
         {
             RejectFood(food, true);
             return;
         }
 
-        if (wantedFood.Contains(food.FoodType))
+        if (wantedFood.Contains(food.foodType))
         {
             AcceptFood(food);
         }
@@ -60,7 +60,7 @@ public class Order : MonoBehaviour
 
     private void AcceptFood(FoodItem food)
     {
-        servedFood.Add(food.FoodType);
+        servedFood.Add(food.foodType);
         Destroy(food.gameObject);
 
         if (IsOrderComplete())

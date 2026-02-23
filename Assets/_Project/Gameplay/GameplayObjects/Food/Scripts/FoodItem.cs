@@ -2,23 +2,36 @@ using UnityEngine;
 
 public class FoodItem : MonoBehaviour
 {
-    //Adjustable variables
-    [SerializeField] public float initFoodColdTime = 30; // in seconds
-
-    [SerializeField] private FoodTypes foodType; // show foodtype in inspector
-    public FoodTypes FoodType => foodType;
-    public FoodStates foodStates {get; private set;}
-    public float foodColdTime;
-
-    void Start()
+    private new Rigidbody rigidbody;
+    public FoodTypes foodType;
+    public bool isPickedUp;
+    private Transform glowOutlineTransform;
+    void Awake()
     {
-        foodColdTime = initFoodColdTime;
+        rigidbody = this.GetComponent<Rigidbody>();
+        glowOutlineTransform = transform.Find("Visual/FoodVisualOutline");
+        isPickedUp = false;
     }
-    void Update()
+    public void PickUp()
     {
-        if (foodType != FoodTypes.Soda 
-            && foodType != FoodTypes.Juice 
-            && foodType != FoodTypes.Water)
-            {foodColdTime -= Time.deltaTime;}
+        rigidbody.isKinematic = true;
+        isPickedUp = true;
     }
+    public void Init(FoodTypes foodType)
+    {
+        LoadTexture();
+        this.foodType = foodType;
+    }
+    private void LoadTexture()
+    {
+        // will load texture later
+    }
+    public void OnThrow(Vector3 direction)
+    {
+        transform.SetParent(null);
+        rigidbody.isKinematic = false;
+        rigidbody.AddForce(direction * 15, ForceMode.Impulse);
+    }
+    public void Glow() {glowOutlineTransform?.gameObject.SetActive(true);}
+    public void StopGlow() {glowOutlineTransform?.gameObject.SetActive(false);}
 }

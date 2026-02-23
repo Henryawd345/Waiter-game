@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using System.Linq;
 
 public class GoodCustomer : MonoBehaviour
 {
@@ -53,7 +54,9 @@ public class GoodCustomer : MonoBehaviour
         if (ownedTable != null)
             return;
 
-        foreach (var currTable in tableList)
+        List<Table> shuffled = tableList.OrderBy(t => Random.value).ToList();
+
+        foreach (var currTable in shuffled)
         {
             if (currTable.requestTable(this))
             {
