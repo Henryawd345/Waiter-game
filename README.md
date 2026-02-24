@@ -6,12 +6,14 @@ This is our roadmap that is used to track out progress.
 ---
 
 ### ''' Important '''
-In each scene if you want the game to work u need at least of the following gameObjects and its children.
+In each scene in order for the game to work u need at least of the following gameObjects and its children.
 
 - _System
 - _Player
 
-or else the other codes will get null references and error at last. Since I haven't made any exception handlers lol.
+if you add any gameplay objects or NPCs you will also need their respective container gameObject too (or else reference will break)
+
+if not done the other codes will get null references and error at last. Since I haven't made any exception handlers lol.
 
 -TK
 
@@ -19,37 +21,17 @@ or else the other codes will get null references and error at last. Since I have
 
 # Tasks
 
-### Henry
-| Status | Done%(Aprox) | Task |
-|:-:|:-:|:-|
-|[]| 60% | Bad customer system|
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-
-### TK
-| Status | Done%(Aprox) | Task |
-|:-:|:-:|:-|
-|[]| 70% | Character Movements (Basic) |
-|[x]| 100% | Good Customer System |
-|[x]| 100% | Table System |
-|[x]| 100% | Ordering System |
-|[]| 60% | Game Manager |
-|[]| 0% | Gameplay Loop (No Bad yet) |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
-|[]| 0% | |
+[x] Player Movements (Basic)
+[] Player Combat
+[x] Good Customer System
+[] Rude Customer System -> Basic annoyance is done but destroy objects system is not yet done
+[] Rude Customer Attacks
+[x] Table System
+[x] Ordering System
+[x] Food Serving and Food Items
+[x] Food Counter System
+[]  Objects (Stuff inside the restaurant) System
+[] UI and menus
 
 ---
 ---
