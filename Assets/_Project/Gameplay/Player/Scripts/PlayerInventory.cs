@@ -22,7 +22,7 @@ public class PlayerInventory : MonoBehaviour
     // Update is called once per frame
     public bool PickUpFood(FoodItem foodInput)
     {
-        if (foods.Count > playerStatsHolder.trayCapacity - 1)
+        if (foods.Count > playerStatsHolder.trayCapacity - 1 || foodInput.isBeingHeld == true)
             return false;
         
         foods.Add(foodInput);

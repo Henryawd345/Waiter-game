@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1055671652550942534}
   - component: {fileID: 1390640247089695563}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 3309993944883921781}
   - component: {fileID: 3840287179194566051}
   - component: {fileID: 1336474181138287500}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FoodVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 3322056562776910912}
   - component: {fileID: 4211759648520629969}
   - component: {fileID: 4083662688151099028}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Food
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,7 +225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   foodType: 0
-  isPickedUp: 0
+  isFresh: 0
+  isBeingHeld: 0
 --- !u!54 &4211759648520629969
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -287,7 +288,7 @@ GameObject:
   - component: {fileID: 7952698270238897952}
   - component: {fileID: 1694967647422365939}
   - component: {fileID: 5907298217655326598}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FoodVisualOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}

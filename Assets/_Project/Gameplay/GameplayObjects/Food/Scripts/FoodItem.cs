@@ -4,23 +4,37 @@ public class FoodItem : MonoBehaviour
 {
     private new Rigidbody rigidbody;
     public FoodTypes foodType;
-    public bool isPickedUp;
+    public bool isFresh;
+    public bool isBeingHeld;
     private Transform glowOutlineTransform;
+    private FoodCounter boundFoodCounter;
     void Awake()
     {
         rigidbody = this.GetComponent<Rigidbody>();
         glowOutlineTransform = transform.Find("Visual/FoodVisualOutline");
-        isPickedUp = false;
+
+        transform.SetParent(GameObject.Find("_GameplayObjects/Foods").transform);
     }
     public void PickUp()
     {
+        if (isFresh == true)
+        {
+            if (boundFoodCounter != null)
+                boundFoodCounter.FoodIsPickedUp(this);
+        }
+        boundFoodCounter = null;
         rigidbody.isKinematic = true;
-        isPickedUp = true;
+        isFresh = false;
+        isBeingHeld = true;
     }
-    public void Init(FoodTypes foodType)
+    public void Init(FoodCounter foodCounter ,FoodTypes foodType)
     {
         LoadTexture();
         this.foodType = foodType;
+        boundFoodCounter = foodCounter;
+        isFresh = true;
+        isBeingHeld = false;
+        // rigidbody.isKinematic = false;
     }
     private void LoadTexture()
     {
@@ -31,6 +45,7 @@ public class FoodItem : MonoBehaviour
         transform.SetParent(null);
         rigidbody.isKinematic = false;
         rigidbody.AddForce(direction * 15, ForceMode.Impulse);
+        isBeingHeld = false;
     }
     public void Glow() {glowOutlineTransform?.gameObject.SetActive(true);}
     public void StopGlow() {glowOutlineTransform?.gameObject.SetActive(false);}

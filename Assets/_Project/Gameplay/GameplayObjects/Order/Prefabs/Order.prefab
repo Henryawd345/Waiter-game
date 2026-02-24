@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 7809722043712383979}
   - component: {fileID: 7662447976589797606}
   - component: {fileID: 4264135070448543804}
-  - component: {fileID: 5552843416582546549}
   m_Layer: 0
   m_Name: OrderVisualTest
   m_TagString: Untagged
@@ -122,27 +121,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5552843416582546549
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6868248532272773961}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7266014323915433626
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,6 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 241596199437148247}
   - component: {fileID: 2271125492736464262}
+  - component: {fileID: 2042739197378355666}
   m_Layer: 0
   m_Name: Order
   m_TagString: Untagged
@@ -189,3 +168,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   MaximumFoodPerCustomer: 4
+--- !u!65 &2042739197378355666
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7266014323915433626}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 4, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}

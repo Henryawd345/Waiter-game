@@ -12,6 +12,7 @@ public class PlayerInteractions : MonoBehaviour
 
     // private just for code's
     FoodItem lastGlowedFood = null;
+    OrderButton lastGlowedButton = null;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -25,10 +26,15 @@ public class PlayerInteractions : MonoBehaviour
     }
     void Update()
     {
-        if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, lookDistance))
+        if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, lookDistance)) // make look food glow
         {
+            // if (lastGlowedFood == null) return;
+
             if (hit.collider.TryGetComponent<FoodItem>(out FoodItem foodHitted))
             {
+                lastGlowedButton?.StopGlow();
+                lastGlowedButton = null;
+
                 if (foodHitted != lastGlowedFood)
                 {
                     lastGlowedFood?.StopGlow();
@@ -36,16 +42,33 @@ public class PlayerInteractions : MonoBehaviour
                     lastGlowedFood.Glow();
                 }
             }
+            else if (hit.collider.TryGetComponent<OrderButton>(out OrderButton buttonHitted))
+            {
+                lastGlowedFood?.StopGlow();
+                lastGlowedFood = null;
+
+                if (buttonHitted != lastGlowedButton)
+                {
+                    lastGlowedButton?.StopGlow();
+                    lastGlowedButton = buttonHitted;
+                    lastGlowedButton.Glow();
+                }
+            }
             else
             {
                 lastGlowedFood?.StopGlow();
                 lastGlowedFood = null;
+                lastGlowedButton?.StopGlow();
+                lastGlowedButton = null;
             }
         }
         else
         {
             lastGlowedFood?.StopGlow();
             lastGlowedFood = null;
+
+            lastGlowedButton?.StopGlow();
+            lastGlowedButton = null;
         }
     }
     public void OnInteract()
@@ -55,9 +78,13 @@ public class PlayerInteractions : MonoBehaviour
             GameObject obj = hit.collider.gameObject;
             // Debug.Log(obj.gameObject.name);
             
-            if (hit.collider.TryGetComponent<FoodItem>(out FoodItem foodHitted))
+            if (hit.collider.TryGetComponent<FoodItem>(out FoodItem foodHitted)) // if interact with food
             {
                 if (!playerInventory.PickUpFood(foodHitted)) Debug.Log("Inventory Full.");
+            }
+            if (hit.collider.TryGetComponent<OrderButton>(out OrderButton buttonHitted)) // if interact with button
+            {
+                buttonHitted.OnPressed();
             }
         }
     }
