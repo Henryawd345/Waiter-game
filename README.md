@@ -21,17 +21,17 @@ if not done the other codes will get null references and error at last. Since I 
 
 # Tasks
 
-[x] Player Movements (Basic)
-[] Player Combat
-[x] Good Customer System
-[] Rude Customer System -> Basic annoyance is done but destroy objects system is not yet done
-[] Rude Customer Attacks
-[x] Table System
-[x] Ordering System
-[x] Food Serving and Food Items
-[x] Food Counter System
-[]  Objects (Stuff inside the restaurant) System
-[] UI and menus
+- [x] Player Movements (Basic)
+- [] Player Combat
+- [x] Good Customer System
+- [] Rude Customer System -> Basic annoyance is done but destroy objects system is not yet done
+- [] Rude Customer Attacks
+- [x] Table System
+- [x] Ordering System
+- [x] Food Serving and Food Items
+- [x] Food Counter System
+- []  Objects (Stuff inside the restaurant) System
+- [] UI and menus
 
 ---
 ---
