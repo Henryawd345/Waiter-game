@@ -19,6 +19,7 @@ public class InputHandler : MonoBehaviour // Is a singleton
     [SerializeField] private KeyCode right = KeyCode.D;
     [SerializeField] private KeyCode run = KeyCode.LeftShift;
     // Action Events
+    [SerializeField] private KeyCode attack = KeyCode.Mouse0;
     [SerializeField] private KeyCode throwItem = KeyCode.Q;
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode mode1 = KeyCode.Alpha1;
@@ -34,6 +35,7 @@ public class InputHandler : MonoBehaviour // Is a singleton
 
     //Events for others to subscribe
     // Action Events
+    public event System.Action onAttack;
     public event System.Action onThrowItem;
     public event System.Action onInteract;
     public event System.Action onMode1;
@@ -97,6 +99,8 @@ public class InputHandler : MonoBehaviour // Is a singleton
 
         if (gameState.isPaused == false)
         {
+            if (Input.GetKeyDown(attack))
+                onAttack?.Invoke();
             if (Input.GetKeyDown(throwItem))
                 onThrowItem?.Invoke();
             if (Input.GetKeyDown(interact))

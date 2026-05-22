@@ -23,9 +23,26 @@ public class PlayerInteractions : MonoBehaviour
     void Start()
     {
         gameState = GameState.Instance;
+        inputScript = InputHandler.Instance;
+
+        inputScript.onInteract += OnInteract;
+        inputScript.onThrowItem += OnThrowItem;
+        inputScript.onMode1 += SwitchMode1;
+        inputScript.onMode2 += SwitchMode2;
+        inputScript.onMode3 += SwitchMode3;
+        inputScript.onSwapItem += OnSwapItem;
     }
     void Update()
     {
+        if (playerStatsHolder.playerState != PlayerState.Server) // serving interactions only in server mode
+        {
+            lastGlowedFood?.StopGlow();
+            lastGlowedFood = null;
+            lastGlowedButton?.StopGlow();
+            lastGlowedButton = null;
+            return;
+        }
+
         if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, lookDistance)) // make look food glow
         {
             // if (lastGlowedFood == null) return;
@@ -73,6 +90,8 @@ public class PlayerInteractions : MonoBehaviour
     }
     public void OnInteract()
     {
+        if (playerStatsHolder.playerState != PlayerState.Server) return; // serving actions only in server mode
+
         if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, lookDistance))
         {
             GameObject obj = hit.collider.gameObject;
@@ -94,10 +113,12 @@ public class PlayerInteractions : MonoBehaviour
     }
     public void SwitchMode1() // server mode
     {
-        
+        playerStatsHolder.playerState = PlayerState.Server;
     }
     public void SwitchMode2() // brawl mode
     {
+        playerStatsHolder.playerState = PlayerState.Brawl;
+
         if (playerStatsHolder.hasFloatingTray == false)
         {
             playerInventory.ThrowAllFood(playerCameraTransform);

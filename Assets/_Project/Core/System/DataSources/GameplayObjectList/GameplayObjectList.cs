@@ -6,6 +6,7 @@ public class GameplayObjectList : MonoBehaviour
     private GameObject tableRoot;
     private GameObject foodCounterRoot;
     public GameObject customerSpawnPoint {get; private set;}
+    public GameObject exitPoint {get; private set;}
     public List<Table> tablesList {get; private set;} = new();
     public List<FoodCounter> foodCountersList {get; private set;} = new();
     // public List<Furnitures> furnituresList;
@@ -23,6 +24,7 @@ public class GameplayObjectList : MonoBehaviour
         tableRoot = GameObject.Find("_GameplayObjects/Tables");
         foodCounterRoot = GameObject.Find("_GameplayObjects/Counters");
         customerSpawnPoint = GameObject.Find("_EventLocations/CustomerSpawnPoint");
+        exitPoint = GameObject.Find("_EventLocations/ExitPoint");
         // Debug.Log("Start with " + furnituresList.Count + " breakable furnitures");
     }
     void Start()
@@ -42,6 +44,9 @@ public class GameplayObjectList : MonoBehaviour
             Debug.Log("No customer spawn point found!");
             return;
         }
+
+        if (exitPoint == null)
+            Debug.Log("No exit point found! (create _EventLocations/ExitPoint at the front door)");
 
         tablesList.AddRange(tableRoot.GetComponentsInChildren<Table>(includeInactive: true));
         foodCountersList.AddRange(foodCounterRoot.GetComponentsInChildren<FoodCounter>(includeInactive: true));

@@ -49,4 +49,27 @@ public class RudeCustomerMovement : MonoBehaviour
         badAgent.ResetPath();
     }
 
+    public void Knockback(Vector3 direction, float distance)
+    {
+        Vector3 target = transform.position + direction.normalized * distance;
+
+        if (NavMesh.SamplePosition(target, out NavMeshHit hit, distance + 1f, NavMesh.AllAreas))
+            badAgent.Warp(hit.position);
+    }
+
+    public void SetAgentEnabled(bool value)
+    {
+        badAgent.enabled = value; // disable while carried so it stops fighting the parenting
+    }
+
+    public bool WarpToNearestNavMesh(Vector3 position, float maxDistance = 5f)
+    {
+        if (NavMesh.SamplePosition(position, out NavMeshHit hit, maxDistance, NavMesh.AllAreas))
+        {
+            badAgent.Warp(hit.position);
+            return true;
+        }
+        return false;
+    }
+
 }

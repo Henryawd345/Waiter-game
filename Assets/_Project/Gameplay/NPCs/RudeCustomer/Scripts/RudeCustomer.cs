@@ -22,6 +22,21 @@ public class RudeCustomer : MonoBehaviour
     private List<Table> tablesList;
     // private List<FurnitureList> furnitureList; // breakable furnitures dont exist yet
 
+    [Header("Combat")]
+    [SerializeField] private float maxHP = 100f;
+    [SerializeField] private float fellDownDuration = 5f;
+    [SerializeField] private float stunDuration = 0.4f;
+    [Header("Throw-out")]
+    [SerializeField] private float groundCheckDistance = 1.5f;
+    [SerializeField] private float maxThrowTime = 5f;
+    private Transform exitPoint;
+    private Collider exitCollider;
+    private float currentHP;
+    private bool isStunned;
+    private bool isCarried;
+    private Coroutine stunRoutine;
+    private Collider bodyCollider;
+
     private RudeCustomerMovement rudeCustomerMovement;
     private GameplayObjectList gameplayObjectList;
     private Coroutine stateRoutine;
@@ -30,6 +45,8 @@ public class RudeCustomer : MonoBehaviour
     void Awake()
     {
         rudeCustomerMovement = GetComponent<RudeCustomerMovement>();
+        bodyCollider = GetComponent<Collider>();
+        if (bodyCollider == null) bodyCollider = GetComponentInChildren<Collider>();
     }
     void Start()
     {
@@ -37,8 +54,14 @@ public class RudeCustomer : MonoBehaviour
         playerTransform = PlayerLocator.PlayerTransform;
 
         tablesList = gameplayObjectList.tablesList;
+        if (gameplayObjectList.exitPoint != null)
+        {
+            exitPoint = gameplayObjectList.exitPoint.transform;
+            exitCollider = gameplayObjectList.exitPoint.GetComponentInChildren<Collider>();
+        }
 
         targetUpdateTime = 10f;
+        currentHP = maxHP;
 
         ChangeState(RudeCustomerStates.Roaming);
     }
@@ -46,6 +69,7 @@ public class RudeCustomer : MonoBehaviour
     void Update()
     {
         if (playerTransform == null) return;
+        if (isCarried || currentRudeCustomerState == RudeCustomerStates.FellDown || isStunned) return; // locked: carried, knocked down, or staggered
 
         float distance = Vector3.Distance(transform.position, playerTransform.position);
 
@@ -72,6 +96,10 @@ public class RudeCustomer : MonoBehaviour
 
             case RudeCustomerStates.Roaming:
                 stateRoutine = StartCoroutine(RoamState());
+                break;
+
+            case RudeCustomerStates.FellDown:
+                stateRoutine = StartCoroutine(FellDownState());
                 break;
         }
     }
@@ -166,9 +194,139 @@ public class RudeCustomer : MonoBehaviour
         return null;
     }
 
+    public void TakeHit(float damage, Vector3 knockbackDir, float knockbackForce)
+    {
+        if (currentRudeCustomerState == RudeCustomerStates.FellDown) return; // already down, ignore punches
+
+        currentHP -= damage;
+        rudeCustomerMovement.Knockback(knockbackDir, knockbackForce);
+
+        if (currentHP <= 0)
+        {
+            if (stunRoutine != null) StopCoroutine(stunRoutine);
+            isStunned = false;
+            ChangeState(RudeCustomerStates.FellDown, true);
+        }
+        else
+        {
+            if (stunRoutine != null) StopCoroutine(stunRoutine);
+            stunRoutine = StartCoroutine(StunBriefly());
+        }
+    }
+
+    public bool IsDown => currentRudeCustomerState == RudeCustomerStates.FellDown;
+
+    private IEnumerator StunBriefly()
+    {
+        isStunned = true;
+        rudeCustomerMovement.Stop();
+        if (stateRoutine != null) StopCoroutine(stateRoutine);
+
+        yield return new WaitForSeconds(stunDuration);
+
+        isStunned = false;
+        ChangeState(currentRudeCustomerState, true); // resume whatever state we were in
+    }
+
+    private IEnumerator FellDownState()
+    {
+        rudeCustomerMovement.Stop();
+
+        yield return new WaitForSeconds(fellDownDuration);
+
+        currentHP = maxHP;
+        ChangeState(RudeCustomerStates.Roaming, true);
+    }
+
+    public bool TryGetCarried()
+    {
+        if (currentRudeCustomerState != RudeCustomerStates.FellDown || isCarried) return false; // only downed customers can be picked up
+
+        isCarried = true;
+        if (stateRoutine != null) StopCoroutine(stateRoutine); // cancel the get-back-up countdown
+        rudeCustomerMovement.SetAgentEnabled(false);
+        if (bodyCollider != null) bodyCollider.enabled = false;
+        return true;
+    }
+
+    public void GetThrownOut(Vector3 direction, float force)
+    {
+        if (!isCarried) return;
+
+        isCarried = false;
+        StartCoroutine(ThrowArc(direction, force));
+    }
+
+    private IEnumerator ThrowArc(Vector3 direction, float force)
+    {
+        Vector3 velocity = direction.normalized * force + Vector3.up * (force * 0.5f);
+        float t = 0f;
+
+        while (t < maxThrowTime)
+        {
+            transform.position += velocity * Time.deltaTime;
+            velocity += Physics.gravity * Time.deltaTime;
+            transform.Rotate(Vector3.right * 540f * Time.deltaTime, Space.Self); // tumble through the air
+            t += Time.deltaTime;
+
+            // flew into the exit zone's volume -> kicked out for good
+            if (exitCollider != null && exitCollider.bounds.Contains(transform.position))
+            {
+                KickedOut();
+                yield break;
+            }
+
+            // landed on something while falling -> what they hit decides their fate
+            if (velocity.y < 0f && Physics.Raycast(transform.position, Vector3.down, out RaycastHit groundHit, groundCheckDistance))
+            {
+                if (IsExit(groundHit.collider))
+                    KickedOut();                          // landed on the exit -> gone for good
+                else
+                    RecoverFromThrow(transform.position); // landed elsewhere -> they get back up
+                yield break;
+            }
+
+            yield return null;
+        }
+
+        RecoverFromThrow(transform.position); // safety: never landed in time
+    }
+
+    private bool IsExit(Collider col)
+    {
+        if (exitPoint == null || col == null) return false;
+        return col.transform == exitPoint || col.transform.IsChildOf(exitPoint);
+    }
+
+    private void KickedOut()
+    {
+        if (boundManager != null)
+            boundManager.ReturnToPool(this); // pooled customer -> back to the pool
+        else
+            gameObject.SetActive(false); // not pooled (e.g. placed in the scene) -> just remove it
+    }
+
+    private void RecoverFromThrow(Vector3 landingPosition)
+    {
+        if (bodyCollider != null) bodyCollider.enabled = true;
+        rudeCustomerMovement.SetAgentEnabled(true);
+        rudeCustomerMovement.WarpToNearestNavMesh(landingPosition);
+
+        currentHP = maxHP; // full HP again -> you have to knock them down once more
+        isStunned = false;
+        isCarried = false;
+
+        ChangeState(RudeCustomerStates.Roaming, true);
+    }
+
     public void ResetStateSelf()
     {
         currentRudeCustomerState = RudeCustomerStates.Chasing;
+        currentHP = maxHP;
+        isStunned = false;
+        isCarried = false;
+        rudeCustomerMovement.SetAgentEnabled(true);
+        if (bodyCollider != null) bodyCollider.enabled = true;
     }
     public void Init(RudeCustomerManager manager)
     {
