@@ -1,7 +1,17 @@
 using UnityEngine;
 
+public enum PlayerState
+{
+    Server,
+    Brawl,
+    Down
+}
 public class PlayerStatsHolder : MonoBehaviour
 {
+    public float HP;
+    public PlayerState playerState;
+    
+
     [Header("Movement stats")]
     [SerializeField] private float MovementSpeed;
     [SerializeField] private float JumpHeight;
@@ -15,11 +25,15 @@ public class PlayerStatsHolder : MonoBehaviour
     [SerializeField] private bool HasSneakers;
     [SerializeField] private bool HasTablet;
 
+    [Header("Numeric stats")]
+    [SerializeField] private int TrayCapacity;
+
     // Public read-only access
     public float movementSpeed => MovementSpeed;
     public float jumpHeight => JumpHeight;
     public float luck => Luck;
     public float income => Income;
+    public int trayCapacity => TrayCapacity;
 
     public bool hasFloatingTray => HasFloatingTray;
     public bool hasSneakers => HasSneakers;

@@ -497,10 +497,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2502768468055784653}
   - component: {fileID: 5214777024070086938}
+  - component: {fileID: 476071379451302488}
   - component: {fileID: 2553758441717677203}
   - component: {fileID: 1920328518704297953}
   - component: {fileID: 681761309076173}
-  - component: {fileID: 476071379451302488}
+  - component: {fileID: 1891568831979823063}
+  - component: {fileID: 7648413758909623034}
+  - component: {fileID: 8089004642900538917}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -551,6 +554,28 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &476071379451302488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204098002282085278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec53f8915e31e1b448c6f79eefb924bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  HP: 0
+  playerState: 0
+  MovementSpeed: 0
+  JumpHeight: 0
+  Luck: 0
+  Income: 0
+  HasFloatingTray: 0
+  HasSneakers: 0
+  HasTablet: 0
+  TrayCapacity: 3
 --- !u!114 &2553758441717677203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,7 +612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2314f1e310130b34a874f438987643bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
---- !u!114 &476071379451302488
+--- !u!114 &1891568831979823063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -596,16 +621,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 7204098002282085278}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec53f8915e31e1b448c6f79eefb924bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 26789c53c93ec0b4e9a86f62345e209d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  MovementSpeed: 0
-  JumpHeight: 0
-  Luck: 0
-  Income: 0
-  HasFloatingTray: 0
-  HasSneakers: 0
-  HasTablet: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+--- !u!114 &7648413758909623034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204098002282085278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d6b2f8d3bd8041b88d02f29a4f12e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractions
+--- !u!114 &8089004642900538917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204098002282085278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7daf5f6c6ad5d34791fd2681d4d925c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
 --- !u!1 &7939753779134015657
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,30 +18,50 @@ public class InputHandler : MonoBehaviour // Is a singleton
     [SerializeField] private KeyCode left = KeyCode.A;
     [SerializeField] private KeyCode right = KeyCode.D;
     [SerializeField] private KeyCode run = KeyCode.LeftShift;
-    // Events
+    // Action Events
+    [SerializeField] private KeyCode throwItem = KeyCode.Q;
+    [SerializeField] private KeyCode interact = KeyCode.E;
+    [SerializeField] private KeyCode mode1 = KeyCode.Alpha1;
+    [SerializeField] private KeyCode mode2 = KeyCode.Alpha2;
+    [SerializeField] private KeyCode mode3 = KeyCode.Alpha3;
+    [SerializeField] private KeyCode swapItemUp = KeyCode.Mouse3;
+    [SerializeField] private KeyCode swapItemDown = KeyCode.Mouse4;
+    // Gameplay Events
     [SerializeField] private KeyCode pause = KeyCode.Escape;
     [SerializeField] private KeyCode toggleCursor = KeyCode.C;
     [SerializeField] private KeyCode startDay = KeyCode.P;
+    private GameState gameState;
 
     //Events for others to subscribe
+    // Action Events
+    public event System.Action onThrowItem;
+    public event System.Action onInteract;
+    public event System.Action onMode1;
+    public event System.Action onMode2;
+    public event System.Action onMode3;
+    public event System.Action<bool> onSwapItem;
+    // Gameplay Events
     public event System.Action onPausePressed;
     public event System.Action onToggleCursorPressed;
     public event System.Action onDayStartPressed;
 
     // Singleton
-    public static InputHandler InputHandlerInstance { get; private set; }
+    public static InputHandler Instance { get; private set; }
     private void Awake()
     {
-        if (InputHandlerInstance != null && InputHandlerInstance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        InputHandlerInstance = this;
+        Instance = this;
     }
     // Singleton
-
+    void Start()
+    {
+        gameState = GameState.Instance;
+    }
     void Update()
     {
 
@@ -75,5 +95,22 @@ public class InputHandler : MonoBehaviour // Is a singleton
         if (Input.GetKeyDown(startDay))
             onDayStartPressed?.Invoke();
 
+        if (gameState.isPaused == false)
+        {
+            if (Input.GetKeyDown(throwItem))
+                onThrowItem?.Invoke();
+            if (Input.GetKeyDown(interact))
+                onInteract?.Invoke();
+
+            if (Input.GetKeyDown(mode1)) onMode1?.Invoke();
+            if (Input.GetKeyDown(mode2)) onMode2?.Invoke();
+            if (Input.GetKeyDown(mode3)) onMode3?.Invoke();
+
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll > 0f)
+                onSwapItem?.Invoke(true);
+            else if (scroll < 0f)
+                onSwapItem?.Invoke(false);
+        }
     }
 }

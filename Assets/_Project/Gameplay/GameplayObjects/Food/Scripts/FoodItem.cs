@@ -2,23 +2,51 @@ using UnityEngine;
 
 public class FoodItem : MonoBehaviour
 {
-    //Adjustable variables
-    [SerializeField] public float initFoodColdTime = 30; // in seconds
-
-    [SerializeField] private FoodTypes foodType; // show foodtype in inspector
-    public FoodTypes FoodType => foodType;
-    public FoodStates foodStates {get; private set;}
-    public float foodColdTime;
-
-    void Start()
+    private new Rigidbody rigidbody;
+    public FoodTypes foodType;
+    public bool isFresh;
+    public bool isBeingHeld;
+    private Transform glowOutlineTransform;
+    private FoodCounter boundFoodCounter;
+    void Awake()
     {
-        foodColdTime = initFoodColdTime;
+        rigidbody = this.GetComponent<Rigidbody>();
+        glowOutlineTransform = transform.Find("Visual/FoodVisualOutline");
+
+        transform.SetParent(GameObject.Find("_GameplayObjects/Foods").transform);
     }
-    void Update()
+    public void PickUp()
     {
-        if (foodType != FoodTypes.Soda 
-            && foodType != FoodTypes.Juice 
-            && foodType != FoodTypes.Water)
-            {foodColdTime -= Time.deltaTime;}
+        if (isFresh == true)
+        {
+            if (boundFoodCounter != null)
+                boundFoodCounter.FoodIsPickedUp(this);
+        }
+        boundFoodCounter = null;
+        rigidbody.isKinematic = true;
+        isFresh = false;
+        isBeingHeld = true;
     }
+    public void Init(FoodCounter foodCounter ,FoodTypes foodType)
+    {
+        LoadTexture();
+        this.foodType = foodType;
+        boundFoodCounter = foodCounter;
+        isFresh = true;
+        isBeingHeld = false;
+        // rigidbody.isKinematic = false;
+    }
+    private void LoadTexture()
+    {
+        // will load texture later
+    }
+    public void OnThrow(Vector3 direction)
+    {
+        transform.SetParent(null);
+        rigidbody.isKinematic = false;
+        rigidbody.AddForce(direction * 15, ForceMode.Impulse);
+        isBeingHeld = false;
+    }
+    public void Glow() {glowOutlineTransform?.gameObject.SetActive(true);}
+    public void StopGlow() {glowOutlineTransform?.gameObject.SetActive(false);}
 }

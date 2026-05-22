@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Table : MonoBehaviour
+public class Table : MonoBehaviour, RudeCustomerTarget
 {
     public TableStates occupationState {get; private set;}
     public GoodCustomer occupier {get; private set;}

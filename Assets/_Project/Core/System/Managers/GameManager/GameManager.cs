@@ -3,12 +3,16 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private GoodCustomerManager goodCustomerManager;
+    private RudeCustomerManager rudeCustomerManager;
     private InputHandler inputHandler;
     private GameState gameState;
 
     void Awake()
     {
         goodCustomerManager = transform.parent.GetComponentInChildren<GoodCustomerManager>();
+        rudeCustomerManager = transform.parent.GetComponentInChildren<RudeCustomerManager>();
+
+        goodCustomerManager.RegisterGameManager(this);
 
         // since game start with not paused so mouse will disappear at first load
         Cursor.visible = false;
@@ -16,21 +20,30 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        inputHandler = InputHandler.InputHandlerInstance;
-        gameState = GameState.GameStateInstance;
+        inputHandler = InputHandler.Instance;
+        gameState = GameState.Instance;
 
         inputHandler.onPausePressed += PauseButtonPressed;
         inputHandler.onToggleCursorPressed += ToggleCursorButtonPressed;
         inputHandler.onDayStartPressed += DayStartButtomPressed;
 
-        gameState.DayStarted += DayStarted;
+        gameState.OnDayStartedEvent += DayStarted;
     }
 
     void DayStarted()
     {   // start every events
         goodCustomerManager.StartDay();
+        rudeCustomerManager.StartDay();
     }
-
+    void EndDay()
+    {
+        goodCustomerManager.EndDay();
+        rudeCustomerManager.EndDay();
+    }
+    public void SpawnRudeCustomer(Vector3 position)
+    {
+        rudeCustomerManager.TrySpawnCustomer(position);
+    }
 
     // Button Pressed Managing
     void PauseButtonPressed()
@@ -53,6 +66,7 @@ public class GameManager : MonoBehaviour
     }
     void DayStartButtomPressed()
     {
+        Debug.Log("Day started!");
         gameState.StartDay();
     }
 }

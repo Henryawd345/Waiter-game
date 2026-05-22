@@ -10,24 +10,24 @@ public class GoodCustomerManager : MonoBehaviour
     [SerializeField] private GoodCustomer goodCustomerPrefab;
     private GameObject customerSpawnPoint;
     private GameObject goodCustomerRoot;
-    private GameObject tableRoot;
     private List<GoodCustomer> goodCustomersList = new();
     private List<Table> tablesList = new();
+    private GameplayObjectList gameplayObjectList;
+    private GameState gameState;
+    private GameManager gameManager;
 
     void Start()
     {
-        goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
-        tableRoot = GameObject.Find("_GameplayObjects/Tables");
-        customerSpawnPoint = GameObject.Find("_EventLocations/CustomerSpawnPoint");
+        gameplayObjectList = GameplayObjectList.Instance;
+        gameState = GameState.Instance;
 
-        if (goodCustomerRoot == null || tableRoot == null)
+        goodCustomerRoot = GameObject.Find("_NPCs/GoodCustomers");
+        customerSpawnPoint = gameplayObjectList.customerSpawnPoint.gameObject;
+        tablesList = gameplayObjectList.tablesList;
+
+        if (goodCustomerRoot == null)
         {
-            Debug.Log("No root for GoodCustomer or TableRoot found!");
-            return;
-        }
-        if (customerSpawnPoint == null)
-        {
-            Debug.Log("No customer spawn point found!");
+            Debug.Log("Good Customer Root gameObject doesn't exist!");
             return;
         }
 
@@ -36,21 +36,36 @@ public class GoodCustomerManager : MonoBehaviour
         {
             GoodCustomer newCustomer = Instantiate(goodCustomerPrefab);
             newCustomer.transform.parent = GameObject.Find("_NPCs/GoodCustomers").transform;
-            newCustomer.SetExitLocation(customerSpawnPoint.transform.position);
-            newCustomer.RegisterManager(this);
+            newCustomer.Init(this, customerSpawnPoint.transform.position);
             newCustomer.gameObject.SetActive(false);
             goodCustomersList.Add(newCustomer);
         }
 
-        tablesList.AddRange(GameObject.Find("_GameplayObjects/Tables").GetComponentsInChildren<Table>(includeInactive: true));
-
-        Debug.Log("Start with\n" + goodCustomersList.Count + " customers and " + tablesList.Count + " tables");
+        Debug.Log("Start with " + goodCustomersList.Count + " good customers");
     }
     public void StartDay()
     {
         // customer spawn loop
-        Debug.Log("Day started!");
         StartCoroutine(CustomerSpawnLoop());
+    }
+    public void EndDay()
+    {
+        StopCoroutine(CustomerSpawnLoop());
+        foreach (GoodCustomer currentCustomer in goodCustomersList)
+        {
+            currentCustomer.ResetStateSelf();
+            ReturnToPool(currentCustomer);
+        }
+    }
+    IEnumerator CustomerSpawnLoop()
+    {
+        while (true)
+        {
+            float delay = Random.Range(5f, 7f);
+            yield return new WaitForSeconds(delay);
+
+            TrySpawnCustomer();
+        }
     }
     void TrySpawnCustomer()
     {
@@ -86,14 +101,12 @@ public class GoodCustomerManager : MonoBehaviour
         }
         return false;
     }
-    IEnumerator CustomerSpawnLoop()
+    public void RegisterGameManager(GameManager manager)
     {
-        while (true)
-        {
-            float delay = Random.Range(5f, 7f);
-            yield return new WaitForSeconds(delay);
-
-            TrySpawnCustomer();
-        }
+        gameManager = manager;
+    }
+    public void TrySpawnRudeCustomer(Vector3 position)
+    {
+        gameManager.SpawnRudeCustomer(position);
     }
 }
