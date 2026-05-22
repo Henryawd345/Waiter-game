@@ -15,6 +15,7 @@ public class PlayerCombat : MonoBehaviour
 
     private PlayerStatsHolder playerStatsHolder;
     private Transform playerCameraTransform;
+    private InputHandler inputScript;
     private float nextPunchTime;
     private RudeCustomer carriedCustomer;
 
@@ -26,24 +27,29 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-        InputHandler.Instance.onAttack += OnAttack;
-        InputHandler.Instance.onInteract += OnInteract;
+        inputScript = InputHandler.Instance;
+        inputScript.onAttack += OnAttackPressed;
+        inputScript.onInteract += OnInteract;
     }
 
-    private void OnAttack()
+    void Update()
     {
-        if (playerStatsHolder.playerState != PlayerState.Brawl) return; // combat only in brawl mode
-
-        if (carriedCustomer != null) // holding someone -> throw them out
-        {
-            ThrowCarried();
-            return;
-        }
-
+        // hold left click to keep punching, paced by punchCooldown
+        if (playerStatsHolder.playerState != PlayerState.Brawl) return;
+        if (carriedCustomer != null) return;       // carrying someone -> a click throws them (see OnAttackPressed)
+        if (!inputScript.isAttackHeld) return;
         if (Time.time < nextPunchTime) return;
-        nextPunchTime = Time.time + punchCooldown;
 
+        nextPunchTime = Time.time + punchCooldown;
         Punch();
+    }
+
+    private void OnAttackPressed()
+    {
+        if (playerStatsHolder.playerState != PlayerState.Brawl) return;
+
+        if (carriedCustomer != null) // holding someone -> a single click throws them out
+            ThrowCarried();
     }
 
     private void OnInteract()

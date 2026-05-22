@@ -9,6 +9,7 @@ public class InputHandler : MonoBehaviour // Is a singleton
     public Vector2 lookInput { get; private set; }
     public bool isMoving { get; private set; }
     public bool isRunningInput { get; private set; }
+    public bool isAttackHeld { get; private set; }
 
     // Key input maps
 
@@ -97,8 +98,11 @@ public class InputHandler : MonoBehaviour // Is a singleton
         if (Input.GetKeyDown(startDay))
             onDayStartPressed?.Invoke();
 
+        isAttackHeld = false;
         if (gameState.isPaused == false)
         {
+            isAttackHeld = Input.GetKey(attack);
+
             if (Input.GetKeyDown(attack))
                 onAttack?.Invoke();
             if (Input.GetKeyDown(throwItem))

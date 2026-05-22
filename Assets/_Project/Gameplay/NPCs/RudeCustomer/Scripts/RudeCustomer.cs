@@ -27,15 +27,14 @@ public class RudeCustomer : MonoBehaviour
     [SerializeField] private float fellDownDuration = 5f;
     [SerializeField] private float stunDuration = 0.4f;
     [Header("Throw-out")]
-    [SerializeField] private float groundCheckDistance = 1.5f;
-    [SerializeField] private float maxThrowTime = 5f;
+    [SerializeField] private float minLaunchUpSpeed = 5f;
     private Transform exitPoint;
     private Collider exitCollider;
     private float currentHP;
     private bool isStunned;
     private bool isCarried;
     private Coroutine stunRoutine;
-    private Collider bodyCollider;
+    private Collider[] bodyColliders;
 
     private RudeCustomerMovement rudeCustomerMovement;
     private GameplayObjectList gameplayObjectList;
@@ -45,8 +44,13 @@ public class RudeCustomer : MonoBehaviour
     void Awake()
     {
         rudeCustomerMovement = GetComponent<RudeCustomerMovement>();
-        bodyCollider = GetComponent<Collider>();
-        if (bodyCollider == null) bodyCollider = GetComponentInChildren<Collider>();
+        bodyColliders = GetComponentsInChildren<Collider>(true); // all of them, so the throw raycast never hits ourselves
+    }
+
+    private void SetCollidersEnabled(bool value)
+    {
+        foreach (Collider c in bodyColliders)
+            if (c != null) c.enabled = value;
     }
     void Start()
     {
@@ -215,6 +219,7 @@ public class RudeCustomer : MonoBehaviour
     }
 
     public bool IsDown => currentRudeCustomerState == RudeCustomerStates.FellDown;
+    public float HPNormalized => maxHP > 0f ? Mathf.Clamp01(currentHP / maxHP) : 0f;
 
     private IEnumerator StunBriefly()
     {
@@ -245,7 +250,7 @@ public class RudeCustomer : MonoBehaviour
         isCarried = true;
         if (stateRoutine != null) StopCoroutine(stateRoutine); // cancel the get-back-up countdown
         rudeCustomerMovement.SetAgentEnabled(false);
-        if (bodyCollider != null) bodyCollider.enabled = false;
+        SetCollidersEnabled(false);
         return true;
     }
 
@@ -259,16 +264,12 @@ public class RudeCustomer : MonoBehaviour
 
     private IEnumerator ThrowArc(Vector3 direction, float force)
     {
-        Vector3 velocity = direction.normalized * force + Vector3.up * (force * 0.5f);
-        float t = 0f;
+        Vector3 dir = direction.normalized;
+        Vector3 velocity = new Vector3(dir.x, 0f, dir.z) * force                    // horizontal travel from aim
+                         + Vector3.up * (Mathf.Max(dir.y * force, 0f) + minLaunchUpSpeed); // always pop up first
 
-        while (t < maxThrowTime)
+        while (true)
         {
-            transform.position += velocity * Time.deltaTime;
-            velocity += Physics.gravity * Time.deltaTime;
-            transform.Rotate(Vector3.right * 540f * Time.deltaTime, Space.Self); // tumble through the air
-            t += Time.deltaTime;
-
             // flew into the exit zone's volume -> kicked out for good
             if (exitCollider != null && exitCollider.bounds.Contains(transform.position))
             {
@@ -276,20 +277,44 @@ public class RudeCustomer : MonoBehaviour
                 yield break;
             }
 
-            // landed on something while falling -> what they hit decides their fate
-            if (velocity.y < 0f && Physics.Raycast(transform.position, Vector3.down, out RaycastHit groundHit, groundCheckDistance))
+            Vector3 nextPos = transform.position + velocity * Time.deltaTime;
+
+            // sweep to the next position so we collide with the world instead of phasing through it
+            if (Physics.Linecast(transform.position, nextPos, out RaycastHit hit, ~0, QueryTriggerInteraction.Ignore))
             {
-                if (IsExit(groundHit.collider))
-                    KickedOut();                          // landed on the exit -> gone for good
-                else
-                    RecoverFromThrow(transform.position); // landed elsewhere -> they get back up
+                if (IsExit(hit.collider))
+                {
+                    KickedOut();                       // flung straight into the exit -> gone for good
+                    yield break;
+                }
+
+                if (velocity.y <= 0f && hit.normal.y >= 0.5f) // hit the floor while falling -> land
+                {
+                    RecoverFromThrow(hit.point);       // hit the ground FIRST -> now they get up and walk
+                    yield break;
+                }
+
+                // hit a wall -> stop against it and slide/fall instead of going through
+                transform.position = hit.point + hit.normal * 0.1f;
+                velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+            }
+            else
+            {
+                transform.position = nextPos;
+            }
+
+            velocity += Physics.gravity * Time.deltaTime;
+            transform.Rotate(Vector3.right * 540f * Time.deltaTime, Space.Self); // tumble through the air
+
+            // guard: fell out of the world -> recover instead of falling forever
+            if (transform.position.y < -20f)
+            {
+                RecoverFromThrow(transform.position);
                 yield break;
             }
 
             yield return null;
         }
-
-        RecoverFromThrow(transform.position); // safety: never landed in time
     }
 
     private bool IsExit(Collider col)
@@ -308,9 +333,14 @@ public class RudeCustomer : MonoBehaviour
 
     private void RecoverFromThrow(Vector3 landingPosition)
     {
-        if (bodyCollider != null) bodyCollider.enabled = true;
+        SetCollidersEnabled(true);
         rudeCustomerMovement.SetAgentEnabled(true);
-        rudeCustomerMovement.WarpToNearestNavMesh(landingPosition);
+
+        bool onMesh = rudeCustomerMovement.WarpToNearestNavMesh(landingPosition, 10f);
+        if (!onMesh && gameplayObjectList != null && gameplayObjectList.customerSpawnPoint != null)
+            rudeCustomerMovement.WarpToNearestNavMesh(gameplayObjectList.customerSpawnPoint.transform.position, 10f);
+
+        transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f); // stand upright after tumbling
 
         currentHP = maxHP; // full HP again -> you have to knock them down once more
         isStunned = false;
@@ -326,7 +356,7 @@ public class RudeCustomer : MonoBehaviour
         isStunned = false;
         isCarried = false;
         rudeCustomerMovement.SetAgentEnabled(true);
-        if (bodyCollider != null) bodyCollider.enabled = true;
+        SetCollidersEnabled(true);
     }
     public void Init(RudeCustomerManager manager)
     {

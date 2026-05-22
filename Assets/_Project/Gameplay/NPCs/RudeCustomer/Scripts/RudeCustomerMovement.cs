@@ -53,8 +53,11 @@ public class RudeCustomerMovement : MonoBehaviour
     {
         Vector3 target = transform.position + direction.normalized * distance;
 
-        if (NavMesh.SamplePosition(target, out NavMeshHit hit, distance + 1f, NavMesh.AllAreas))
-            badAgent.Warp(hit.position);
+        // stop at navmesh edges (walls/obstacles) so they don't get knocked through them
+        if (badAgent.isOnNavMesh && badAgent.Raycast(target, out NavMeshHit hit))
+            target = hit.position;
+
+        badAgent.Warp(target);
     }
 
     public void SetAgentEnabled(bool value)
