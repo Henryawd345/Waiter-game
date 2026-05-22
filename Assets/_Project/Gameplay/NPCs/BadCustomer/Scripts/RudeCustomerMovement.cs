@@ -17,14 +17,11 @@ public class RudeCustomerMovement : MonoBehaviour
     [Header("Roaming")]
     [SerializeField] private float minRoamDistance = 2f;
     [SerializeField] private float roamRadius = 6f;
-    //[SerializeField] private float minWaitTime = 0.7f;
-    //[SerializeField] private float maxWaitTime = 1.8f;
     [SerializeField] private float minNewTargetDistanceFromLast = 1.5f;
 
     private NavMeshAgent badAgent;
     Transform playerTransform;
     private float targetUpdateTime;
-    //private float nextRoamActionTime;
     private Vector3 currentRoamTarget;
     private Vector3 lastRoamTarget;
 
